@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { clsx } from 'clsx';
-  import { twMerge } from 'tailwind-merge';
-  import Card from '~/components/basic/Card.svelte';
-  import Stack from '~/components/basic/Stack.svelte';
-  import ControlPanel from '~/components/features/ControlPanel/index.svelte';
-  import ImagePicker from '~/components/features/ImagePicker.svelte';
-  import { gradients, paddingTypes } from '~/constants';
-  import { copyImage, domToBlob, downloadFromBlob } from '~/lib';
+  import { clsx } from "clsx";
+  import { twMerge } from "tailwind-merge";
+  import Card from "~/components/basic/Card.svelte";
+  import Stack from "~/components/basic/Stack.svelte";
+  import ControlPanel from "~/components/features/ControlPanel/index.svelte";
+  import ImagePicker from "~/components/features/ImagePicker.svelte";
+  import { gradients, paddingTypes } from "~/constants";
+  import { copyImage, domToBlob, downloadFromBlob } from "~/lib";
+  import { toastStore } from "~/stores";
 
   let currentGradient = 0;
-  let selectImageUrl = '';
+  let selectImageUrl = "";
   let padding = paddingTypes.small;
   let cardRef: HTMLDivElement;
 
@@ -41,7 +42,7 @@
 
     try {
       await copyImage(cardRef);
-      alert('Copied!');
+      toastStore.show("Copied to clipboard!", "success", 5000);
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +71,7 @@
           ref={(el) => (cardRef = el)}
           class={twMerge(
             clsx(
-              'border border-gray-600 w-9/12 transition-all ease-in-out duration-300 min-h-[400px]',
+              "border border-gray-600 w-9/12 transition-all ease-in-out duration-300 min-h-[400px]",
               gradient,
               padding
             )
@@ -86,10 +87,11 @@
         </Card>
         <ControlPanel
           {padding}
+          {currentGradient}
           on:paddingChange={({ detail: { padding } }) => updatePaddingHandler(padding)}
-          on:gradientChange={({ detail: { index } }) => changeGradient(index)}
-          on:copy={copyHandler}
-          on:save={saveHandler}
+          on:gradientChange={({ detail: { gradientIndex } }) => changeGradient(gradientIndex)}
+          onCopy={copyHandler}
+          onSave={saveHandler}
         />
       </div>
     </Stack>
