@@ -1,21 +1,19 @@
 <script lang="ts">
-  import { clsx } from "clsx";
-  import { twMerge } from "tailwind-merge";
-  import Card from "~/components/basic/Card.svelte";
   import Stack from "~/components/basic/Stack.svelte";
   import ControlPanel from "~/components/features/ControlPanel/index.svelte";
-  import ImagePicker from "~/components/features/ImagePicker.svelte";
-  import { gradients, paddingTypes } from "~/constants";
+  import MainBlock from "~/components/features/MainBlock/index.svelte";
+  import { gradients, paddingTypes, roundnessTypes } from "~/constants";
   import { copyImage, domToBlob, downloadFromBlob } from "~/lib";
   import { toastStore } from "~/stores";
 
-  let currentGradient = 0;
+  let gradientIndex = 0;
   let selectImageUrl = "";
   let padding = paddingTypes.small;
+  let roundness = roundnessTypes.small;
   let cardRef: HTMLDivElement;
 
-  const changeGradient = (index: number) => {
-    currentGradient = index;
+  const changeGradientHandler = (index: number) => {
+    gradientIndex = index;
   };
 
   const imageSelectHandler = async (e: CustomEvent<Event>) => {
@@ -31,12 +29,17 @@
     }
   };
 
-  const updatePaddingHandler = (paddingKey: keyof typeof paddingTypes) => {
+  const changePaddingHandler = (paddingKey: keyof typeof paddingTypes) => {
     padding = paddingTypes[paddingKey];
   };
 
+  const changeRoundnessHandler = (roundnessKey: keyof typeof roundnessTypes) => {
+    roundness = roundnessTypes[roundnessKey];
+  };
+
   const copyHandler = async () => {
-    if (!cardRef) {
+    if (!cardRef || !selectImageUrl) {
+      toastStore.show("Please select an image first!", "error", 5000);
       return;
     }
 
@@ -56,42 +59,52 @@
     downloadFromBlob(blob);
   };
 
-  $: gradient = gradients[currentGradient];
+  const removeImageHandler = () => {
+    selectImageUrl = "";
+  };
+
+  $: gradient = gradients[gradientIndex];
 </script>
 
-<div class="min-h-[100vh] min-w-[100vw] bg-slate-950 flex items-center justify-center relative">
-  <div class="sm:container min-w-[1300px]">
+<svelte:head>
+  <title>Smiiily - Gradient Background Image Generator for Social Media</title>
+  <meta
+    name="description"
+    content="Smiiily is a gradient background image generator for social media. You can generate gradient background images for Twitter, Facebook, Instagram, and more."
+  />
+</svelte:head>
+
+<div>
+  <div class="sm:container min-w-[1300px] mx-auto">
     <Stack>
-      <div class="">
-        <h1 class="text-white text-5xl font-black">Smiiily</h1>
-        <h2 class="text-white text-xl">Gradient Image Generator</h2>
-      </div>
+      <Stack class="gap-2">
+        <h1 class="text-white text-4xl font-black flex items-center gap-3">
+          <img src="/favicon.png" class="w-12 h-12" alt="Smiiily Logo" />
+          Smiiily
+        </h1>
+        <h2 class="text-gray-400 text-xl">Gradient Image Generator</h2>
+      </Stack>
       <div class="min-w-5xl space-x-10 flex">
-        <Card
+        <MainBlock
           ref={(el) => (cardRef = el)}
-          class={twMerge(
-            clsx(
-              "border border-gray-600 w-9/12 transition-all ease-in-out duration-300 min-h-[400px]",
-              gradient,
-              padding
-            )
-          )}
-        >
-          {#if selectImageUrl}
-            <img src={selectImageUrl} class="m-auto" alt="" />
-          {:else}
-            <div class="flex items-center justify-center m-auto">
-              <ImagePicker on:change={imageSelectHandler} />
-            </div>
-          {/if}
-        </Card>
+          {selectImageUrl}
+          {gradient}
+          {padding}
+          {roundness}
+          onImageChange={imageSelectHandler}
+        />
         <ControlPanel
           {padding}
-          {currentGradient}
-          on:paddingChange={({ detail: { padding } }) => updatePaddingHandler(padding)}
-          on:gradientChange={({ detail: { gradientIndex } }) => changeGradient(gradientIndex)}
+          {gradientIndex}
+          {roundness}
+          imageSelected={!!selectImageUrl}
+          on:paddingChange={({ detail: { padding } }) => changePaddingHandler(padding)}
+          on:gradientChange={({ detail: { gradientIndex } }) =>
+            changeGradientHandler(gradientIndex)}
+          on:roundnessChange={({ detail: { roundness } }) => changeRoundnessHandler(roundness)}
           onCopy={copyHandler}
           onSave={saveHandler}
+          onRemoveImage={removeImageHandler}
         />
       </div>
     </Stack>
