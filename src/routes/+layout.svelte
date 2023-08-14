@@ -1,18 +1,21 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import Stack from "~/components/basic/Stack.svelte";
   import ToastSlot from "~/components/features/ToastSlot.svelte";
   import "~/styles/app.css";
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("/pwa/service-worker.js")
-      .then(function (registration) {
-        console.log("Service worker registered successfully");
-      })
-      .catch(function (err) {
-        console.error("Unable to register service worker.", err);
-      });
-  }
+  onMount(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/pwa/service-worker.js")
+        .then(function (registration) {
+          console.log("Service worker registered successfully");
+        })
+        .catch(function (err) {
+          console.error("Unable to register service worker.", err);
+        });
+    }
+  });
 </script>
 
 <main class="min-h-[100vh] bg-slate-950 relative md:pt-10 pt-6 flex flex-col gap-8">
