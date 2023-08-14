@@ -4,12 +4,10 @@
   let classes = "";
 
   const defaultClasses = "flex flex-col gap-4";
-  
+
   $: stackClasses = clsx(defaultClasses, classes);
 
-  export {
-    classes as class
-  }
+  export { classes as class };
 </script>
 
 <div class={stackClasses}>

@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { clsx } from 'clsx';
-  import { createEventDispatcher } from 'svelte';
-  import { twMerge } from 'tailwind-merge';
-  import { paddingKeys, paddingTypes, type PaddingType } from '~/constants';
-  import Button from '../../basic/Button.svelte';
-  import Card from '../../basic/Card.svelte';
-  import Stack from '../../basic/Stack.svelte';
-  import CopyIcon from '../../icons/CopyIcon.svelte';
-  import DownloadIcon from '../../icons/DownloadIcon.svelte';
-  import { toastStore } from '~/stores';
+  import { clsx } from "clsx";
+  import { createEventDispatcher } from "svelte";
+  import { twMerge } from "tailwind-merge";
+  import { paddingKeys, paddingTypes, type PaddingType } from "~/constants";
+  import Button from "../../basic/Button.svelte";
+  import Card from "../../basic/Card.svelte";
+  import Stack from "../../basic/Stack.svelte";
+  import CopyIcon from "../../icons/CopyIcon.svelte";
+  import DownloadIcon from "../../icons/DownloadIcon.svelte";
+  import { toastStore } from "~/stores";
 
   type EventParams = {
     paddingChange: {
@@ -23,7 +23,7 @@
   export let padding = paddingTypes.small;
 
   const selectPaddingHandler = (paddingType: PaddingType) => {
-    dispatch('paddingChange', {
+    dispatch("paddingChange", {
       padding: paddingType
     });
   };
@@ -36,8 +36,8 @@
       <div class="gap-2 flex flex-wrap">
         {#each paddingKeys as paddingKey}
           <button
-            class={clsx('text-white', {
-              'border-b border-white': padding === paddingTypes[paddingKey]
+            class={clsx("text-white", {
+              "border-b border-white": padding === paddingTypes[paddingKey]
             })}
             on:click={() => selectPaddingHandler(paddingKey)}
           >
@@ -65,18 +65,18 @@
     </Stack> -->
     <hr class="border-gray-600" />
     <div class="flex justify-between gap-4">
-      <Button class="w-full" outline on:click={() => dispatch('copy')}>
+      <Button class="w-full" outline on:click={() => dispatch("copy")}>
         <CopyIcon slot="icon" />
         <span> Copy </span>
       </Button>
       <Button
         class="bg-blue-600 hover:bg-blue-500 text-white w-full"
-        on:click={() => dispatch('save')}
+        on:click={() => dispatch("save")}
       >
         <DownloadIcon slot="icon" />
         <span> Save </span>
       </Button>
-      <Button class="text-white" on:click={() => toastStore.show('hello', 'success', 3000)}
+      <Button class="text-white" on:click={() => toastStore.show("あちゃぁああ", "error", 5000)}
         >toast</Button
       >
     </div>
