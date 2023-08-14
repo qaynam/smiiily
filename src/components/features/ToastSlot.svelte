@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { clsx } from "clsx";
   import { onMount } from "svelte";
   import { fade, slide } from "svelte/transition";
-  import { twMerge } from "tailwind-merge";
   import { toastStore, type ToastOptions, type ToastType } from "~/stores";
   import Stack from "../basic/Stack.svelte";
   import CircleCheckFilledIcon from "../icons/CircleCheckFilledIcon.svelte";
@@ -20,15 +18,6 @@
     };
   });
 
-  const getToastBgColor = (type: ToastType) => {
-    return {
-      "border-green-500 bg-green-900/30 text-green-200": type === "success",
-      "border-red-500 bg-red-900/30 text-red-200": type === "error",
-      "bg-yellow-500": type === "warning",
-      "bg-blue-500": type === "info"
-    };
-  };
-
   const getIcon = (type: ToastType) => {
     switch (type) {
       case "success":
@@ -40,12 +29,12 @@
     }
   };
 
-  const getIconStrokeColor = (type: ToastType) => {
+  const getIconColor = (type: ToastType) => {
     switch (type) {
       case "success":
-        return "green";
+        return "text-green-500";
       case "error":
-        return "#dc2626";
+        return "text-red-500";
       default:
         break;
     }
@@ -57,13 +46,9 @@
     <div
       in:slide
       out:fade
-      class={twMerge(
-        "rounded-lg p-3 border border-gray-400 backdrop-blur-sm text-white flex gap-2",
-        // clsx(getToastBgColor(item.type))
-        "bg-white drop-shadow-lg text-gray-800"
-      )}
+      class="bg-white drop-shadow-lg rounded-lg p-3 border border-gray-400 backdrop-blur-sm flex gap-2 text-neutral-800"
     >
-      <svelte:component this={getIcon(item.type)} fillColor={getIconStrokeColor(item.type)} />
+      <svelte:component this={getIcon(item.type)} class={getIconColor(item.type)} />
       <div>
         {item.message}
       </div>
