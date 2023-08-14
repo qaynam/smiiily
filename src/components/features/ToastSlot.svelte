@@ -41,7 +41,9 @@
   };
 </script>
 
-<Stack class="fixed right-10 bottom-10 transition-all ease-in-out duration-300">
+<Stack
+  class="fixed lg:right-10 lg:bottom-10 lg:left-auto lg:top-auto lg:translate-x-0 top-4 left-4 transition-all ease-in-out duration-300"
+>
   {#each toastItem as item}
     <div
       in:slide

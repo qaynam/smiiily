@@ -22,6 +22,7 @@
   import ControlPanelRow from "./ControlPanelRow.svelte";
   import RotateClockWiseIcon from "~/components/icons/RotateClockWiseIcon.svelte";
   import { toastStore } from "~/stores";
+  import ShadowIcon from "~/components/icons/ShadowIcon.svelte";
 
   type EventParams = {
     paddingChange: {
@@ -97,6 +98,20 @@
       </div>
     </ControlPanelRow>
     <ControlPanelRow labelIcon={BoxPaddingIcon} label="Padding">
+      <div class="gap-3 flex flex-wrap">
+        {#each paddingKeys as paddingKey}
+          <button
+            class={clsx("text-white", {
+              "border-b border-white": padding === paddingTypes[paddingKey]
+            })}
+            on:click={() => selectPaddingHandler(paddingKey)}
+          >
+            {paddingKey.replace(/^\w/, (c) => c.toUpperCase())}
+          </button>
+        {/each}
+      </div>
+    </ControlPanelRow>
+    <ControlPanelRow labelIcon={ShadowIcon} label="Drop Shadow">
       <div class="gap-3 flex flex-wrap">
         {#each paddingKeys as paddingKey}
           <button

@@ -22,5 +22,13 @@ export const roundnessTypes = {
   large: "rounded-[1.5rem]"
 };
 
+export const dropShadowTypes = {
+  none: "shadow-none",
+  small: "shadow-sm",
+  medium: "shadow-md",
+  large: "shadow-lg"
+};
+
 export const paddingKeys = Object.keys(paddingTypes) as PaddingType[];
 export const roundnessKeys = Object.keys(roundnessTypes) as RoundnessType[];
+export const dropShadowKeys = Object.keys(dropShadowTypes) as RoundnessType[];
