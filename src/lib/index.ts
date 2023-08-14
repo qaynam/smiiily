@@ -23,7 +23,7 @@ export async function copyImage(dom: HTMLElement) {
   await copyBlobToClipBoard(blob, 'image/png');
 }
 
-export function donwloadFromBlob(blob: Blob) {
+export function downloadFromBlob(blob: Blob) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;

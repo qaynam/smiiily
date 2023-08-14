@@ -6,7 +6,7 @@
   import ControlPanel from '~/components/features/ControlPanel/index.svelte';
   import ImagePicker from '~/components/features/ImagePicker.svelte';
   import { gradients, paddingTypes } from '~/constants';
-  import { copyImage, domToBlob, donwloadFromBlob } from '~/lib';
+  import { copyImage, domToBlob, downloadFromBlob } from '~/lib';
 
   let currentGradient = 0;
   let selectImageUrl = '';
@@ -52,7 +52,7 @@
       return;
     }
     const blob = await domToBlob(cardRef);
-    donwloadFromBlob(blob);
+    downloadFromBlob(blob);
   };
 
   $: gradient = gradients[currentGradient];
