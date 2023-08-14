@@ -1,6 +1,6 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info';
+export type ToastType = "success" | "error" | "warning" | "info";
 export type ToastOptions = {
   message: string;
   type: ToastType;
@@ -12,7 +12,7 @@ const toastWritable = writable(toasts);
 
 export const toastStore = {
   subscribe: toastWritable.subscribe,
-  show: (message: string, type: ToastType, duration: number) => {
+  show: (message: string, type: ToastType, duration = 5000) => {
     toastWritable.update((toasts) => {
       const id = window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
 
