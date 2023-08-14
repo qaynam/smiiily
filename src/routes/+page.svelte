@@ -2,6 +2,7 @@
   import Stack from "~/components/basic/Stack.svelte";
   import ControlPanel from "~/components/features/ControlPanel/index.svelte";
   import MainBlock from "~/components/features/MainBlock/index.svelte";
+  import ToastSlot from "~/components/features/ToastSlot.svelte";
   import { gradients, paddingTypes, roundnessTypes } from "~/constants";
   import { copyImage, domToBlob, downloadFromBlob } from "~/lib";
   import { toastStore } from "~/stores";
@@ -16,15 +17,16 @@
     gradientIndex = index;
   };
 
-  const imageSelectHandler = async (e: CustomEvent<Event>) => {
-    const target = e.detail.target as HTMLInputElement;
-    if (!target.files) {
+  const imageSelectHandler = async (e: CustomEvent<{ file: File }>) => {
+    const file = e.detail.file;
+    if (!file) {
       return;
     }
 
     try {
-      selectImageUrl = URL.createObjectURL(target.files[0]);
+      selectImageUrl = URL.createObjectURL(file);
     } catch (error) {
+      toastStore.show("Failed to load image!", "error", 5000);
       console.error(error);
     }
   };
@@ -47,6 +49,7 @@
       await copyImage(cardRef);
       toastStore.show("Copied to clipboard!", "success", 5000);
     } catch (error) {
+      toastStore.show("Failed to Copy Image!", "error", 5000);
       console.error(error);
     }
   };
@@ -68,6 +71,10 @@
 
 <svelte:head>
   <title>Smiiily - Gradient Background Image Generator for Social Media</title>
+  <meta
+    property="og:title"
+    content="Smiiily - Gradient Background Image Generator for Social Media"
+  />
   <meta
     name="description"
     content="Smiiily is a gradient background image generator for social media. You can generate gradient background images for Twitter, Facebook, Instagram, and more."

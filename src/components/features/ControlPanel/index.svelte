@@ -48,7 +48,6 @@
   export let onRemoveImage: () => void | Promise<void> = () => void 0;
 
   const selectPaddingHandler = (paddingType: PaddingType) => {
-    console.log(padding);
     dispatch("paddingChange", {
       padding: paddingType
     });

@@ -14,7 +14,7 @@
         >
       </span>
       <span class="text-gray-500">
-        &copy; 2021 <a class="underline" href="/">Smiiily</a>
+        &copy; 2023 <a class="underline" href="/">Smiiily</a>
       </span>
     </Stack>
   </footer>

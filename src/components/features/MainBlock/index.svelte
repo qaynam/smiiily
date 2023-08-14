@@ -9,7 +9,7 @@
   export let roundness: string;
   export let selectImageUrl: string;
   export let ref: (el: HTMLDivElement) => void;
-  export let onImageChange: (e: CustomEvent<Event>) => void | Promise<void>;
+  export let onImageChange: (e: CustomEvent<{ file: File }>) => void | Promise<void>;
 </script>
 
 <Card
