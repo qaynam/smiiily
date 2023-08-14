@@ -6,7 +6,7 @@
   export let label: string;
 </script>
 
-<Stack class="gap-4">
+<Stack class="gap-3">
   <span class="font-bold text-white flex gap-1">
     <svelte:component this={labelIcon} />
     {label}
