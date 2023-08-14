@@ -12,6 +12,7 @@
 
   let classes = "";
   let outline = false;
+  let disabled = false;
   let clickHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     dispatch("click", {
       target: e.currentTarget
@@ -25,14 +26,15 @@
     clsx(defaultClass, classes, {
       "bg-transparent border border-gray-500 text-gray-200": outline,
       "hover:bg-gray-900 hover:border-gray-400": outline,
-      "flex items-center justify-center gap-2": hasIcon
+      "flex items-center justify-center gap-2": hasIcon,
+      "cursor-not-allowed disabled:opacity-50": disabled
     })
   );
 
-  export { classes as class, outline };
+  export { classes as class, outline, disabled };
 </script>
 
-<button class={buttonClass} on:click={clickHandler}>
+<button class={buttonClass} on:click={clickHandler} {disabled}>
   <slot name="icon" />
   <slot />
 </button>
