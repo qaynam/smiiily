@@ -1,15 +1,18 @@
 <script lang="ts">
-  export let fillColor = "red";
+  let classes = "";
+
+  export { classes as class };
 </script>
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="24"
   height="24"
+  class={classes}
   viewBox="0 0 24 24"
   stroke-width="2"
   stroke="currentColor"
-  fill={fillColor}
+  fill="none"
   stroke-linecap="round"
   stroke-linejoin="round"
 >
