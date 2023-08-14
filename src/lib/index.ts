@@ -13,8 +13,17 @@ export async function copyBlobToClipBoard(blob: Blob, type: string) {
 }
 
 export async function domToBlob(dom: HTMLElement) {
+  const scale = 4;
   return await domtoimage.toBlob(dom, {
-    quality: 1
+    quality: 1,
+    width: dom.clientWidth * scale,
+    height: dom.clientHeight * scale,
+    style: {
+      transform: "scale(" + scale + ")",
+      transformOrigin: "top left",
+      width: dom.clientWidth + "px",
+      height: dom.clientHeight + "px"
+    }
   });
 }
 
