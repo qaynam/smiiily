@@ -25,10 +25,10 @@
     </div>
     <div class="max-w-xs text-white">
       <span> click to select image </span>
-      <span> or </span>
+      <!-- <span> or </span>
       <span> drag and drop here </span>
       <span> or </span>
-      <span> paste image from clipboard </span>
+      <span> paste image from clipboard </span> -->
     </div>
   </Stack>
 </label>
