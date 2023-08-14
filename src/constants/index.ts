@@ -1,5 +1,6 @@
 export type PaddingType = "small" | "medium" | "large";
 export type RoundnessType = "none" | "small" | "medium" | "large";
+export type DropShadowType = RoundnessType | "extraLarge";
 
 export const gradients = [
   "bg-gradient-to-l from-violet-700 via-indigo-300 to-cyan-400",
@@ -28,9 +29,10 @@ export const roundnessTypes = {
 
 export const dropShadowTypes = {
   none: "shadow-none",
-  small: "shadow-sm",
-  medium: "shadow-md",
-  large: "shadow-lg"
+  small: "shadow-md shadow-zinc-800/70",
+  medium: "shadow-lg shadow-zinc-800/70",
+  large: "shadow-xl shadow-zinc-800/70",
+  extraLarge: "shadow-2xl shadow-zinc-800/70"
 };
 
 export const paddingKeys = Object.keys(paddingTypes) as PaddingType[];

@@ -7,6 +7,7 @@
   export let gradient: string;
   export let padding: string;
   export let roundness: string;
+  export let dropShadow: string;
   export let selectImageUrl: string;
   export let ref: (el: HTMLDivElement) => void;
   export let onImageChange: (e: CustomEvent<{ file: File }>) => void | Promise<void>;
@@ -29,7 +30,8 @@
         src={selectImageUrl}
         class={twMerge(
           "mx-auto overflow-hidden object-cover transition-all duration-300",
-          roundness
+          roundness,
+          dropShadow
         )}
         alt=""
       />

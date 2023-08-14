@@ -2,8 +2,7 @@
   import Stack from "~/components/basic/Stack.svelte";
   import ControlPanel from "~/components/features/ControlPanel/index.svelte";
   import MainBlock from "~/components/features/MainBlock/index.svelte";
-  import ToastSlot from "~/components/features/ToastSlot.svelte";
-  import { gradients, paddingTypes, roundnessTypes } from "~/constants";
+  import { dropShadowTypes, gradients, paddingTypes, roundnessTypes } from "~/constants";
   import { copyImage, domToBlob, downloadFromBlob } from "~/lib";
   import { toastStore } from "~/stores";
 
@@ -11,6 +10,7 @@
   let selectImageUrl = "";
   let padding = paddingTypes.small;
   let roundness = roundnessTypes.small;
+  let dropShadow = dropShadowTypes.small;
   let cardRef: HTMLDivElement;
 
   const changeGradientHandler = (index: number) => {
@@ -37,6 +37,10 @@
 
   const changeRoundnessHandler = (roundnessKey: keyof typeof roundnessTypes) => {
     roundness = roundnessTypes[roundnessKey];
+  };
+
+  const changeDropShadowHandler = (dropShadowKey: keyof typeof dropShadowTypes) => {
+    dropShadow = dropShadowTypes[dropShadowKey];
   };
 
   const copyHandler = async () => {
@@ -83,12 +87,12 @@
 
 <div class="sm:container lg:min-w-[1300px] mx-auto md:px-0 px-6">
   <Stack>
-    <Stack class="gap-2">
-      <h1 class="text-white text-4xl font-black flex items-center gap-3">
-        <img src="/favicon.png" class="w-12 h-12" alt="Smiiily Logo" />
+    <Stack class="lg:gap-2 gap-0">
+      <h1 class="text-white lg:text-4xl text-3xl font-black flex items-center gap-3">
+        <img src="/favicon.png" class="lg:w-10 lg:h-10 h-8 w-8" alt="Smiiily Logo" />
         Smiiily
       </h1>
-      <h2 class="text-gray-400 text-xl">Gradient Background Image Generator</h2>
+      <h2 class="text-gray-400 lg:text-xl text-lg">Gradient Background Image Generator</h2>
     </Stack>
     <div
       class="min-w-5xl flex lg:flex-row flex-col lg:space-x-10 space-x-0 space-y-10 lg:space-y-0"
@@ -99,16 +103,19 @@
         {gradient}
         {padding}
         {roundness}
+        {dropShadow}
         onImageChange={imageSelectHandler}
       />
       <ControlPanel
         {padding}
         {gradientIndex}
         {roundness}
+        {dropShadow}
         imageSelected={!!selectImageUrl}
         on:paddingChange={({ detail: { padding } }) => changePaddingHandler(padding)}
         on:gradientChange={({ detail: { gradientIndex } }) => changeGradientHandler(gradientIndex)}
         on:roundnessChange={({ detail: { roundness } }) => changeRoundnessHandler(roundness)}
+        on:dropShadowChange={({ detail: { dropShadow } }) => changeDropShadowHandler(dropShadow)}
         onCopy={copyHandler}
         onSave={saveHandler}
         onRemoveImage={removeImageHandler}

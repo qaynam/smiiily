@@ -9,7 +9,10 @@
     type PaddingType,
     roundnessKeys,
     roundnessTypes,
-    type RoundnessType
+    type RoundnessType,
+    dropShadowTypes,
+    type DropShadowType,
+    dropShadowKeys
   } from "~/constants";
   import Button from "../../basic/Button.svelte";
   import Card from "../../basic/Card.svelte";
@@ -34,6 +37,9 @@
     roundnessChange: {
       roundness: RoundnessType;
     };
+    dropShadowChange: {
+      dropShadow: DropShadowType;
+    };
     copy: undefined;
     save: undefined;
   };
@@ -42,6 +48,7 @@
 
   export let padding = paddingTypes.small;
   export let roundness = roundnessTypes.small;
+  export let dropShadow = dropShadowTypes.small;
   export let gradientIndex = 0;
   export let imageSelected = false;
   export let onCopy: () => void | Promise<void> = () => void 0;
@@ -66,6 +73,12 @@
     });
   };
 
+  const selectDropShadowHandler = (dropShadowType: DropShadowType) => {
+    dispatch("dropShadowChange", {
+      dropShadow: dropShadowType
+    });
+  };
+
   const copyHandler = async (event: CustomEvent<{ target: HTMLButtonElement }>) => {
     event.detail.target.disabled = true;
     await onCopy();
@@ -79,7 +92,7 @@
   };
 </script>
 
-<Card class="border border-gray-600 lg:w-3/12 w-full self-start ">
+<Card class="border border-gray-600 lg:w-3/12 w-full self-start">
   <Stack class="gap-8">
     <ControlPanelRow labelIcon={RadiusTopLeftIcon} label="Roundness">
       <div class="gap-3 flex flex-wrap">
@@ -113,14 +126,14 @@
     </ControlPanelRow>
     <ControlPanelRow labelIcon={ShadowIcon} label="Drop Shadow">
       <div class="gap-3 flex flex-wrap">
-        {#each paddingKeys as paddingKey}
+        {#each dropShadowKeys as dropShadowKey}
           <button
             class={clsx("text-white", {
-              "border-b border-white": padding === paddingTypes[paddingKey]
+              "border-b border-white": dropShadow === dropShadowTypes[dropShadowKey]
             })}
-            on:click={() => selectPaddingHandler(paddingKey)}
+            on:click={() => selectDropShadowHandler(dropShadowKey)}
           >
-            {paddingKey.replace(/^\w/, (c) => c.toUpperCase())}
+            {dropShadowKey.replace(/^\w/, (c) => c.toUpperCase())}
           </button>
         {/each}
       </div>
