@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { clsx } from 'clsx';
-  import { onMount } from 'svelte';
-  import { twMerge } from 'tailwind-merge';
-  import { toastStore, type ToastOptions, type ToastType } from '~/stores';
-  import { slide } from 'svelte/transition';
-  import { cubicInOut } from 'svelte/easing';
+  import { clsx } from "clsx";
+  import { onMount } from "svelte";
+  import { fade, slide } from "svelte/transition";
+  import { twMerge } from "tailwind-merge";
+  import { toastStore, type ToastOptions, type ToastType } from "~/stores";
+  import Stack from "../basic/Stack.svelte";
+  import CircleCheckFilledIcon from "../icons/CircleCheckFilledIcon.svelte";
+  import CircleXIcon from "../icons/CircleXFilledIcon.svelte";
 
   let toastItem: ToastOptions[] = [];
 
@@ -18,31 +20,53 @@
     };
   });
 
-  const getStype = (type: ToastType) => {
+  const getToastBgColor = (type: ToastType) => {
     return {
-      'bg-green-500': type === 'success',
-      'bg-red-500': type === 'error',
-      'bg-yellow-500': type === 'warning',
-      'bg-blue-500': type === 'info'
+      "border-green-500 bg-green-900/30 text-green-200": type === "success",
+      "border-red-500 bg-red-900/30 text-red-200": type === "error",
+      "bg-yellow-500": type === "warning",
+      "bg-blue-500": type === "info"
     };
+  };
+
+  const getIcon = (type: ToastType) => {
+    switch (type) {
+      case "success":
+        return CircleCheckFilledIcon;
+      case "error":
+        return CircleXIcon;
+      default:
+        break;
+    }
+  };
+
+  const getIconStrokeColor = (type: ToastType) => {
+    switch (type) {
+      case "success":
+        return "green";
+      case "error":
+        return "#dc2626";
+      default:
+        break;
+    }
   };
 </script>
 
-{#if toastItem && toastItem.length > 0}
-  {#each toastItem as item, index}
+<Stack class="fixed right-10 bottom-10 transition-all ease-in-out duration-300">
+  {#each toastItem as item}
     <div
-      transition:slide={{
-        delay: 0,
-        duration: 300,
-        easing: cubicInOut
-      }}
+      in:slide
+      out:fade
       class={twMerge(
-        'rounded-lg p-5 border border-gray-400 fixed right-0 text-white',
-        clsx(getStype(item.type))
+        "rounded-lg p-3 border border-gray-400 backdrop-blur-sm text-white flex gap-2",
+        // clsx(getToastBgColor(item.type))
+        "bg-white drop-shadow-lg text-gray-800"
       )}
-      style={`bottom: ${(index + 1) * 5}rem; right: 2.5rem;`}
     >
-      {item.message}
+      <svelte:component this={getIcon(item.type)} fillColor={getIconStrokeColor(item.type)} />
+      <div>
+        {item.message}
+      </div>
     </div>
   {/each}
-{/if}
+</Stack>
