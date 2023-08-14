@@ -6,6 +6,7 @@
   "start_url": "/",
   "name": "Smiiily",
   "short_name": "Smiiily",
+  "lang": "en-US",
   "description": "Gradient Background Image Generator",
   "icons": [
     {
@@ -27,6 +28,18 @@
       "src": "/pwa/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/pwa/screenshot1.png",
+      "type": "image/png",
+      "sizes": "345x720"
+    },
+    {
+      "src": "/pwa/screenshot2.png",
+      "type": "image/png",
+      "sizes": "345x720"
     }
   ]
 }
