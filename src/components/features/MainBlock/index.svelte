@@ -16,7 +16,7 @@
   {ref}
   class={twMerge(
     clsx(
-      "w-9/12 transition-all ease-in-out duration-300 min-h-[400px] overflow-hidden bg-transparent",
+      "lg:w-9/12 transition-all ease-in-out duration-300 min-h-[400px] overflow-hidden bg-transparent lg:block flex",
       gradient,
       padding,
       roundness

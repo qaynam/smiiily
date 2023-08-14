@@ -95,7 +95,7 @@
   for="image"
   class={twMerge(
     clsx(
-      "cursor-pointer hover:bg-gray-400/40 min-w-[30rem] bg-gray-400/30 rounded-lg bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-40 ring ring-gray-100 p-10",
+      "cursor-pointer hover:bg-gray-400/40 md:min-w-[30rem] bg-gray-400/30 rounded-lg bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-40 ring ring-gray-100 md:p-10 p-6",
       {
         "ring ring-gray-600": dragOver
       }

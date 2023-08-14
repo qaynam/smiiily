@@ -81,39 +81,38 @@
   />
 </svelte:head>
 
-<div>
-  <div class="sm:container min-w-[1300px] mx-auto">
-    <Stack>
-      <Stack class="gap-2">
-        <h1 class="text-white text-4xl font-black flex items-center gap-3">
-          <img src="/favicon.png" class="w-12 h-12" alt="Smiiily Logo" />
-          Smiiily
-        </h1>
-        <h2 class="text-gray-400 text-xl">Gradient Image Generator</h2>
-      </Stack>
-      <div class="min-w-5xl space-x-10 flex">
-        <MainBlock
-          ref={(el) => (cardRef = el)}
-          {selectImageUrl}
-          {gradient}
-          {padding}
-          {roundness}
-          onImageChange={imageSelectHandler}
-        />
-        <ControlPanel
-          {padding}
-          {gradientIndex}
-          {roundness}
-          imageSelected={!!selectImageUrl}
-          on:paddingChange={({ detail: { padding } }) => changePaddingHandler(padding)}
-          on:gradientChange={({ detail: { gradientIndex } }) =>
-            changeGradientHandler(gradientIndex)}
-          on:roundnessChange={({ detail: { roundness } }) => changeRoundnessHandler(roundness)}
-          onCopy={copyHandler}
-          onSave={saveHandler}
-          onRemoveImage={removeImageHandler}
-        />
-      </div>
+<div class="sm:container lg:min-w-[1300px] mx-auto md:px-0 px-6">
+  <Stack>
+    <Stack class="gap-2">
+      <h1 class="text-white text-4xl font-black flex items-center gap-3">
+        <img src="/favicon.png" class="w-12 h-12" alt="Smiiily Logo" />
+        Smiiily
+      </h1>
+      <h2 class="text-gray-400 text-xl">Gradient Background Image Generator</h2>
     </Stack>
-  </div>
+    <div
+      class="min-w-5xl flex lg:flex-row flex-col lg:space-x-10 space-x-0 space-y-10 lg:space-y-0"
+    >
+      <MainBlock
+        ref={(el) => (cardRef = el)}
+        {selectImageUrl}
+        {gradient}
+        {padding}
+        {roundness}
+        onImageChange={imageSelectHandler}
+      />
+      <ControlPanel
+        {padding}
+        {gradientIndex}
+        {roundness}
+        imageSelected={!!selectImageUrl}
+        on:paddingChange={({ detail: { padding } }) => changePaddingHandler(padding)}
+        on:gradientChange={({ detail: { gradientIndex } }) => changeGradientHandler(gradientIndex)}
+        on:roundnessChange={({ detail: { roundness } }) => changeRoundnessHandler(roundness)}
+        onCopy={copyHandler}
+        onSave={saveHandler}
+        onRemoveImage={removeImageHandler}
+      />
+    </div>
+  </Stack>
 </div>

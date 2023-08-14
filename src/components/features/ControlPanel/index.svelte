@@ -78,7 +78,7 @@
   };
 </script>
 
-<Card class="border border-gray-600 w-3/12 self-start ">
+<Card class="border border-gray-600 lg:w-3/12 w-full self-start ">
   <Stack class="gap-8">
     <ControlPanelRow labelIcon={RadiusTopLeftIcon} label="Roundness">
       <div class="gap-3 flex flex-wrap">
