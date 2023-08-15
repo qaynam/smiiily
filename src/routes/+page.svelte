@@ -16,8 +16,6 @@
   let selectImageBlob: Blob | null = null;
   let imageBlogLoading = false;
 
-
-
   const updateSelectImageBlob = async () => {
     imageBlogLoading = true;
     selectImageBlob = selectImageUrl ? await domToBlob(mainBlockRef) : null;
@@ -32,7 +30,7 @@
 
     try {
       selectImageUrl = URL.createObjectURL(file);
-      await updateSelectImageBlob()
+      await updateSelectImageBlob();
     } catch (error) {
       toastStore.show("Failed to load image!", "error", 5000);
       console.error(error);
@@ -40,27 +38,27 @@
   };
 
   const mainBlockRefHandler = (el: HTMLDivElement) => {
-    mainBlockRef = el
-  }
+    mainBlockRef = el;
+  };
 
   const changePaddingHandler = async (paddingKey: keyof typeof paddingTypes) => {
     padding = paddingTypes[paddingKey];
-    await updateSelectImageBlob()
+    await updateSelectImageBlob();
   };
 
   const changeRoundnessHandler = async (roundnessKey: keyof typeof roundnessTypes) => {
     roundness = roundnessTypes[roundnessKey];
-    await updateSelectImageBlob()
+    await updateSelectImageBlob();
   };
 
   const changeDropShadowHandler = async (dropShadowKey: keyof typeof dropShadowTypes) => {
     dropShadow = dropShadowTypes[dropShadowKey];
-    await updateSelectImageBlob()
+    await updateSelectImageBlob();
   };
 
   const changeGradientHandler = async (index: number) => {
     gradientIndex = index;
-    await updateSelectImageBlob()
+    await updateSelectImageBlob();
   };
 
   const copyHandler = async () => {
@@ -69,13 +67,12 @@
       return;
     }
 
-    if(!selectImageBlob || imageBlogLoading) {
+    if (!selectImageBlob || imageBlogLoading) {
       toastStore.show("Please wait for the image to load!", "error", 5000);
       return;
     }
 
     try {
-      
       await copyBlobToClipBoard(selectImageBlob, "image/png");
       toastStore.show("Copied to clipboard!", "success", 5000);
     } catch (error) {
@@ -88,14 +85,14 @@
     if (!mainBlockRef) {
       return;
     }
-    
-    await updateSelectImageBlob()
 
-    if(!selectImageBlob || imageBlogLoading) {
+    await updateSelectImageBlob();
+
+    if (!selectImageBlob || imageBlogLoading) {
       toastStore.show("Please wait for the image to load!", "error", 5000);
       return;
     }
-    
+
     downloadFromBlob(selectImageBlob);
   };
 
@@ -106,7 +103,7 @@
   $: gradient = gradients[gradientIndex];
 </script>
 
-<Seo/>
+<Seo />
 <div class="sm:container lg:min-w-[1300px] mx-auto md:px-0 px-6">
   <Stack>
     <Stack class="lg:gap-2 gap-0">
