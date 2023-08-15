@@ -21,9 +21,6 @@
   };
 
   const updateSelectImageBlob = async () => {
-    if (!isIOS()) {
-      return;
-    }
     selectImageBlob = selectImageUrl ? await domToBlob(mainBlockRef) : null;
   };
 
