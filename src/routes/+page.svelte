@@ -4,7 +4,7 @@
   import MainBlock from "~/components/features/MainBlock/index.svelte";
   import Seo from "~/components/features/Seo.svelte";
   import { dropShadowTypes, gradients, paddingTypes, roundnessTypes } from "~/constants";
-  import { copyBlobToClipBoard, domToBlob, downloadFromBlob } from "~/lib";
+  import { copyBlobToClipBoard, domToBlob, downloadFromBlob, isIOS } from "~/lib";
   import { toastStore } from "~/stores";
 
   let gradientIndex = 0;
@@ -16,9 +16,7 @@
   let selectImageBlob: Blob | null = null;
   let imageBlogLoading = false;
 
-  const changeGradientHandler = async (index: number) => {
-    gradientIndex = index;
-  };
+
 
   const updateSelectImageBlob = async () => {
     imageBlogLoading = true;
@@ -47,14 +45,22 @@
 
   const changePaddingHandler = async (paddingKey: keyof typeof paddingTypes) => {
     padding = paddingTypes[paddingKey];
+    await updateSelectImageBlob()
   };
 
   const changeRoundnessHandler = async (roundnessKey: keyof typeof roundnessTypes) => {
     roundness = roundnessTypes[roundnessKey];
+    await updateSelectImageBlob()
   };
 
   const changeDropShadowHandler = async (dropShadowKey: keyof typeof dropShadowTypes) => {
     dropShadow = dropShadowTypes[dropShadowKey];
+    await updateSelectImageBlob()
+  };
+
+  const changeGradientHandler = async (index: number) => {
+    gradientIndex = index;
+    await updateSelectImageBlob()
   };
 
   const copyHandler = async () => {
@@ -69,7 +75,7 @@
     }
 
     try {
-      await updateSelectImageBlob()
+      
       await copyBlobToClipBoard(selectImageBlob, "image/png");
       toastStore.show("Copied to clipboard!", "success", 5000);
     } catch (error) {
