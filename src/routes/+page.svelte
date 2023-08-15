@@ -14,8 +14,9 @@
   let mainBlockRef: HTMLDivElement;
   let selectImageBlob: Blob | null = null;
 
-  const changeGradientHandler = (index: number) => {
+  const changeGradientHandler = async (index: number) => {
     gradientIndex = index;
+    await updateSelectImageBlob()
   };
 
   const updateSelectImageBlob = async () => {
