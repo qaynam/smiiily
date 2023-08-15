@@ -17,7 +17,4 @@
     "a11y-click-events-have-key-events": "ignore",
     "a11y-no-static-element-interactions": "ignore",
   },
-  "[svelte]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
 }
