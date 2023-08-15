@@ -47,3 +47,9 @@ export function downloadFromBlob(blob: Blob) {
 export function isSafari() {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
+
+export function isIOS() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || isSafari();
+}

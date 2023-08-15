@@ -3,7 +3,7 @@
   import ControlPanel from "~/components/features/ControlPanel/index.svelte";
   import MainBlock from "~/components/features/MainBlock/index.svelte";
   import { dropShadowTypes, gradients, paddingTypes, roundnessTypes } from "~/constants";
-  import { copyImage, domToBlob, downloadFromBlob, isSafari } from "~/lib";
+  import { copyImage, domToBlob, downloadFromBlob, isIOS } from "~/lib";
   import { toastStore } from "~/stores";
 
   let gradientIndex = 0;
@@ -19,7 +19,7 @@
   };
 
   const updateSelectImageBlob = async () => {
-    if (!isSafari()) {
+    if (!isIOS()) {
       return;
     }
     selectImageBlob = selectImageUrl ? await domToBlob(mainBlockRef) : null;
@@ -33,6 +33,7 @@
 
     try {
       selectImageUrl = URL.createObjectURL(file);
+      await updateSelectImageBlob()
     } catch (error) {
       toastStore.show("Failed to load image!", "error", 5000);
       console.error(error);
@@ -57,6 +58,11 @@
   const copyHandler = async () => {
     if (!mainBlockRef || !selectImageUrl) {
       toastStore.show("Please select an image first!", "error", 5000);
+      return;
+    }
+
+    if(!selectImageBlob) {
+      toastStore.show("Please wait for the image to load!", "error", 5000);
       return;
     }
 
