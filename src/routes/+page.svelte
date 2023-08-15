@@ -2,6 +2,7 @@
   import Stack from "~/components/basic/Stack.svelte";
   import ControlPanel from "~/components/features/ControlPanel/index.svelte";
   import MainBlock from "~/components/features/MainBlock/index.svelte";
+  import Seo from "~/components/features/Seo.svelte";
   import { dropShadowTypes, gradients, paddingTypes, roundnessTypes } from "~/constants";
   import { copyImage, domToBlob, downloadFromBlob, isIOS } from "~/lib";
   import { toastStore } from "~/stores";
@@ -91,18 +92,7 @@
   $: gradient = gradients[gradientIndex];
 </script>
 
-<svelte:head>
-  <title>Smiiily - Gradient Background Image Generator for Social Media</title>
-  <meta
-    property="og:title"
-    content="Smiiily - Gradient Background Image Generator for Social Media"
-  />
-  <meta
-    name="description"
-    content="Smiiily is a gradient background image generator for social media. You can generate gradient background images for Twitter, Facebook, Instagram, and more."
-  />
-</svelte:head>
-
+<Seo/>
 <div class="sm:container lg:min-w-[1300px] mx-auto md:px-0 px-6">
   <Stack>
     <Stack class="lg:gap-2 gap-0">
