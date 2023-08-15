@@ -1,17 +1,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { fade, slide } from "svelte/transition";
-  import { toastStore, type ToastOptions, type ToastType } from "~/stores";
+  import { toastStore, type ToastOptions, type ToastType, type Toast } from "~/stores";
   import Stack from "../basic/Stack.svelte";
   import CircleCheckFilledIcon from "../icons/CircleCheckFilledIcon.svelte";
   import CircleXIcon from "../icons/CircleXFilledIcon.svelte";
 
   let toastItems: ToastOptions[] = [];
 
+  const toastChangeHandler = (value: Toast) => {
+    toastItems = Object.values(value).reverse() as ToastOptions[];
+  };
+
   onMount(() => {
-    const unsubscribe = toastStore.subscribe((value) => {
-      toastItems = [...value.values()];
-    });
+    const unsubscribe = toastStore.subscribe(toastChangeHandler);
 
     return () => {
       unsubscribe();
@@ -44,7 +46,7 @@
 <Stack
   class="fixed lg:right-10 lg:bottom-10 lg:left-auto lg:top-auto lg:translate-x-0 top-4 left-0 right-0 lg:px-0 px-4 lg:transform-none transition-all ease-in-out duration-300 gap-3 z-10"
 >
-  {#each toastItems as item}
+  {#each toastItems as item, index}
     <div class="flex justify-center" on:click|stopPropagation|preventDefault>
       <div
         in:slide
