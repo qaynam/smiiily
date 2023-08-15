@@ -43,5 +43,9 @@ export function isSafari() {
 export function isIOS() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || isSafari();
+  return (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) || isSafari();
+}
+
+export function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
