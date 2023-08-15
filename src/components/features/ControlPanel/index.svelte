@@ -24,7 +24,6 @@
   import PaletteIcon from "~/components/icons/PaletteIcon.svelte";
   import ControlPanelRow from "./ControlPanelRow.svelte";
   import RotateClockWiseIcon from "~/components/icons/RotateClockWiseIcon.svelte";
-  import { toastStore } from "~/stores";
   import ShadowIcon from "~/components/icons/ShadowIcon.svelte";
 
   type EventParams = {

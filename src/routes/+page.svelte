@@ -5,7 +5,7 @@
   import Seo from "~/components/features/Seo.svelte";
   import { dropShadowTypes, gradients, paddingTypes, roundnessTypes } from "~/constants";
   import { copyBlobToClipBoard, domToBlob, downloadFromBlob, isIOS } from "~/lib";
-  import { toastStore } from "~/stores";
+  import { Toast } from "~/lib/toast";
 
   let gradientIndex = 0;
   let selectImageUrl = "";
@@ -32,7 +32,7 @@
       selectImageUrl = URL.createObjectURL(file);
       await updateSelectImageBlob();
     } catch (error) {
-      toastStore.show("Failed to load image!", "error", 5000);
+      Toast.show("Failed to load image!", "error", 5000);
       console.error(error);
     }
   };
@@ -63,20 +63,20 @@
 
   const copyHandler = async () => {
     if (!mainBlockRef || !selectImageUrl) {
-      toastStore.show("Please select an image first!", "error", 5000);
+      Toast.show("Please select an image first!", "error", 5000);
       return;
     }
 
     if (!selectImageBlob || imageBlogLoading) {
-      toastStore.show("Please wait for the image to load!", "error", 5000);
+      Toast.show("Please wait for the image to load!", "error", 5000);
       return;
     }
 
     try {
       await copyBlobToClipBoard(selectImageBlob, "image/png");
-      toastStore.show("Copied to clipboard!", "success", 5000);
+      Toast.show("Copied to clipboard!", "success", 5000);
     } catch (error) {
-      toastStore.show("Failed to Copy Image!", "error", 5000);
+      Toast.show("Failed to Copy Image!", "error", 5000);
       console.error(error);
     }
   };
@@ -89,7 +89,7 @@
     await updateSelectImageBlob();
 
     if (!selectImageBlob || imageBlogLoading) {
-      toastStore.show("Please wait for the image to load!", "error", 5000);
+      Toast.show("Please wait for the image to load!", "error", 5000);
       return;
     }
 

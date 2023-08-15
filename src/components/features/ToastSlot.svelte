@@ -1,19 +1,20 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { fade, slide } from "svelte/transition";
-  import { toastStore, type ToastOptions, type ToastType, type Toast } from "~/stores";
   import Stack from "../basic/Stack.svelte";
   import CircleCheckFilledIcon from "../icons/CircleCheckFilledIcon.svelte";
   import CircleXIcon from "../icons/CircleXFilledIcon.svelte";
+  import { Toast } from "~/lib/toast";
+  import type { Toasts, ToastOptions, ToastType } from "~/stores/toast";
 
   let toastItems: ToastOptions[] = [];
 
-  const toastChangeHandler = (value: Toast) => {
+  const toastChangeHandler = (value: Toasts) => {
     toastItems = Object.values(value).reverse() as ToastOptions[];
   };
 
   onMount(() => {
-    const unsubscribe = toastStore.subscribe(toastChangeHandler);
+    const unsubscribe = Toast.subscribe(toastChangeHandler);
 
     return () => {
       unsubscribe();
