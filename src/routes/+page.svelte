@@ -3,7 +3,7 @@
   import ControlPanel from "~/components/features/ControlPanel/index.svelte";
   import MainBlock from "~/components/features/MainBlock/index.svelte";
   import { dropShadowTypes, gradients, paddingTypes, roundnessTypes } from "~/constants";
-  import { copyImage, domToBlob, downloadFromBlob } from "~/lib";
+  import { copyImage, domToBlob, downloadFromBlob, isSafari } from "~/lib";
   import { toastStore } from "~/stores";
 
   let gradientIndex = 0;
@@ -11,10 +11,18 @@
   let padding = paddingTypes.small;
   let roundness = roundnessTypes.small;
   let dropShadow = dropShadowTypes.small;
-  let cardRef: HTMLDivElement;
+  let mainBlockRef: HTMLDivElement;
+  let selectImageBlob: Blob | null = null;
 
   const changeGradientHandler = (index: number) => {
     gradientIndex = index;
+  };
+
+  const updateSelectImageBlob = async () => {
+    if (!isSafari()) {
+      return;
+    }
+    selectImageBlob = selectImageUrl ? await domToBlob(mainBlockRef) : null;
   };
 
   const imageSelectHandler = async (e: CustomEvent<{ file: File }>) => {
@@ -31,26 +39,29 @@
     }
   };
 
-  const changePaddingHandler = (paddingKey: keyof typeof paddingTypes) => {
+  const changePaddingHandler = async (paddingKey: keyof typeof paddingTypes) => {
     padding = paddingTypes[paddingKey];
+    await updateSelectImageBlob();
   };
 
-  const changeRoundnessHandler = (roundnessKey: keyof typeof roundnessTypes) => {
+  const changeRoundnessHandler = async (roundnessKey: keyof typeof roundnessTypes) => {
     roundness = roundnessTypes[roundnessKey];
+    await updateSelectImageBlob();
   };
 
-  const changeDropShadowHandler = (dropShadowKey: keyof typeof dropShadowTypes) => {
+  const changeDropShadowHandler = async (dropShadowKey: keyof typeof dropShadowTypes) => {
     dropShadow = dropShadowTypes[dropShadowKey];
+    await updateSelectImageBlob();
   };
 
   const copyHandler = async () => {
-    if (!cardRef || !selectImageUrl) {
+    if (!mainBlockRef || !selectImageUrl) {
       toastStore.show("Please select an image first!", "error", 5000);
       return;
     }
 
     try {
-      await copyImage(cardRef);
+      await copyImage(mainBlockRef, selectImageBlob);
       toastStore.show("Copied to clipboard!", "success", 5000);
     } catch (error) {
       toastStore.show("Failed to Copy Image!", "error", 5000);
@@ -59,10 +70,10 @@
   };
 
   const saveHandler = async () => {
-    if (!cardRef) {
+    if (!mainBlockRef) {
       return;
     }
-    const blob = await domToBlob(cardRef);
+    const blob = await domToBlob(mainBlockRef);
     downloadFromBlob(blob);
   };
 
@@ -98,7 +109,7 @@
       class="min-w-5xl flex lg:flex-row flex-col lg:space-x-10 space-x-0 space-y-10 lg:space-y-0"
     >
       <MainBlock
-        ref={(el) => (cardRef = el)}
+        ref={(el) => (mainBlockRef = el)}
         {selectImageUrl}
         {gradient}
         {padding}

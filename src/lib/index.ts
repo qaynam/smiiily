@@ -27,16 +27,23 @@ export async function domToBlob(dom: HTMLElement) {
   });
 }
 
-export async function copyImage(dom: HTMLElement) {
-  const blob = await domToBlob(dom);
-  await copyBlobToClipBoard(blob, "image/png");
+export async function copyImage(dom: HTMLElement, blob: Blob | null = null) {
+  let currentBlob = blob;
+  if (currentBlob === null) {
+    currentBlob = await domToBlob(dom);
+  }
+  await copyBlobToClipBoard(currentBlob, "image/png");
 }
 
 export function downloadFromBlob(blob: Blob) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = Date.now() + ".png";
+  anchor.download = "Smiiily_" + window.crypto.randomUUID() + ".png";
   anchor.click();
   URL.revokeObjectURL(url);
+}
+
+export function isSafari() {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
