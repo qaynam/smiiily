@@ -1,34 +1,36 @@
 <script lang="ts">
   import clsx from "clsx";
-  import { afterUpdate } from "svelte";
   import { twMerge } from "tailwind-merge";
   import Card from "~/components/basic/Card.svelte";
   import ImagePicker from "../ImagePicker.svelte";
+  import { appStore } from "~/stores/app";
+  import { domToBlob } from "~/lib/common";
+  import { afterUpdate, createEventDispatcher, tick } from "svelte";
 
   export let gradient: string;
   export let padding: string;
   export let roundness: string;
   export let dropShadow: string;
   export let selectImageUrl: string;
-  export let ref: (el: HTMLDivElement) => void;
   export let onImageChange: (e: CustomEvent<{ file: File }>) => void | Promise<void>;
 
-  let cardRef: HTMLDivElement;
-
-  const refHandler = (el: HTMLDivElement) => {
-    cardRef = el;
-    ref(cardRef);
-  }
-
-  afterUpdate(()=> {
-    if (cardRef) {
-      ref(cardRef);
+  const updateHandler = async (el: HTMLDivElement | null) => {
+    if (el) {
+      let blob = await domToBlob(el);
+      // TODO: fix this
+      blob = await domToBlob(el);
+      appStore.update((state) => {
+        const newState = state;
+        newState.mainBlockRef = el;
+        newState.mainBlockImageBlob = blob;
+        return newState;
+      });
     }
-  })
+  };
 </script>
 
 <Card
-  ref={refHandler}
+  onUpdate={updateHandler}
   class={twMerge(
     clsx(
       "lg:w-9/12 transition-all ease-in-out duration-300 min-h-[400px] overflow-hidden bg-transparent lg:block flex",

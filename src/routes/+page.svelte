@@ -1,24 +1,28 @@
 <script lang="ts">
+  import { SvelteComponent, onMount, setContext, tick } from "svelte";
+  import { writable } from "svelte/store";
   import Stack from "~/components/basic/Stack.svelte";
   import ControlPanel from "~/components/features/ControlPanel/index.svelte";
   import MainBlock from "~/components/features/MainBlock/index.svelte";
   import Seo from "~/components/features/Seo.svelte";
   import { dropShadowTypes, gradients, paddingTypes, roundnessTypes } from "~/constants";
-  import { copyBlobToClipBoard, domToBlob, downloadFromBlob, isIOS } from "~/lib";
+  import { copyBlobToClipBoard, domToBlob, downloadFromBlob } from "~/lib/common";
   import { Toast } from "~/lib/toast";
+  import { appStore } from "~/stores/app";
 
   let gradientIndex = 0;
   let selectImageUrl = "";
   let padding = paddingTypes.small;
   let roundness = roundnessTypes.small;
   let dropShadow = dropShadowTypes.small;
-  let mainBlockRef: HTMLDivElement;
   let selectImageBlob: Blob | null = null;
   let imageBlogLoading = false;
 
   const updateSelectImageBlob = async () => {
     imageBlogLoading = true;
-    selectImageBlob = selectImageUrl ? await domToBlob(mainBlockRef) : null;
+    await tick();
+    selectImageBlob =
+      selectImageUrl && $appStore.mainBlockRef ? await domToBlob($appStore.mainBlockRef) : null;
     imageBlogLoading = false;
   };
 
@@ -27,6 +31,8 @@
     if (!file) {
       return;
     }
+
+    await tick();
 
     try {
       selectImageUrl = URL.createObjectURL(file);
@@ -37,10 +43,6 @@
     }
   };
 
-  const mainBlockRefHandler = (el: HTMLDivElement) => {
-    mainBlockRef = el;
-  };
-
   const changePaddingHandler = async (paddingKey: keyof typeof paddingTypes) => {
     padding = paddingTypes[paddingKey];
     await updateSelectImageBlob();
@@ -48,32 +50,35 @@
 
   const changeRoundnessHandler = async (roundnessKey: keyof typeof roundnessTypes) => {
     roundness = roundnessTypes[roundnessKey];
+    await tick();
     await updateSelectImageBlob();
   };
 
   const changeDropShadowHandler = async (dropShadowKey: keyof typeof dropShadowTypes) => {
     dropShadow = dropShadowTypes[dropShadowKey];
+    await tick();
     await updateSelectImageBlob();
   };
 
   const changeGradientHandler = async (index: number) => {
     gradientIndex = index;
+    await tick();
     await updateSelectImageBlob();
   };
 
-  const copyHandler = async () => {
-    if (!mainBlockRef || !selectImageUrl) {
+  const copyHandler = async (blob?: Blob | null) => {
+    if (!$appStore.mainBlockRef || !selectImageUrl) {
       Toast.show("Please select an image first!", "error", 5000);
       return;
     }
 
-    if (!selectImageBlob || imageBlogLoading) {
+    if (!$appStore.mainBlockImageBlob || imageBlogLoading) {
       Toast.show("Please wait for the image to load!", "error", 5000);
       return;
     }
 
     try {
-      await copyBlobToClipBoard(selectImageBlob, "image/png");
+      await copyBlobToClipBoard(blob ?? $appStore.mainBlockImageBlob, "image/png");
       Toast.show("Copied to clipboard!", "success", 5000);
     } catch (error) {
       Toast.show("Failed to Copy Image!", "error", 5000);
@@ -82,7 +87,7 @@
   };
 
   const saveHandler = async () => {
-    if (!mainBlockRef) {
+    if (!$appStore.mainBlockRef) {
       return;
     }
 
@@ -117,7 +122,6 @@
       class="min-w-5xl flex lg:flex-row flex-col lg:space-x-10 space-x-0 space-y-10 lg:space-y-0"
     >
       <MainBlock
-        ref={mainBlockRefHandler}
         {selectImageUrl}
         {gradient}
         {padding}
@@ -131,10 +135,10 @@
         {roundness}
         {dropShadow}
         imageSelected={!!selectImageUrl}
-        on:paddingChange={({ detail: { padding } }) => changePaddingHandler(padding)}
-        on:gradientChange={({ detail: { gradientIndex } }) => changeGradientHandler(gradientIndex)}
-        on:roundnessChange={({ detail: { roundness } }) => changeRoundnessHandler(roundness)}
-        on:dropShadowChange={({ detail: { dropShadow } }) => changeDropShadowHandler(dropShadow)}
+        onPaddingChange={changePaddingHandler}
+        onGradientChange={changeGradientHandler}
+        onRoundnessChange={changeRoundnessHandler}
+        onDropShadowChange={changeDropShadowHandler}
         onCopy={copyHandler}
         onSave={saveHandler}
         onRemoveImage={removeImageHandler}

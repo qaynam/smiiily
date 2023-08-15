@@ -25,6 +25,7 @@
   import ControlPanelRow from "./ControlPanelRow.svelte";
   import RotateClockWiseIcon from "~/components/icons/RotateClockWiseIcon.svelte";
   import ShadowIcon from "~/components/icons/ShadowIcon.svelte";
+  import { appStore } from "~/stores/app";
 
   type EventParams = {
     paddingChange: {
@@ -50,37 +51,18 @@
   export let dropShadow = dropShadowTypes.small;
   export let gradientIndex = 0;
   export let imageSelected = false;
-  export let onCopy: () => void | Promise<void> = () => void 0;
+  export let onPaddingChange: (padding: PaddingType) => void | Promise<void> = () => void 0;
+  export let onGradientChange: (gradientIndex: number) => void | Promise<void> = () => void 0;
+  export let onRoundnessChange: (roundness: RoundnessType) => void | Promise<void> = () => void 0;
+  export let onDropShadowChange: (dropShadow: DropShadowType) => void | Promise<void> = () =>
+    void 0;
+  export let onCopy: (blob?: Blob | null) => void | Promise<void> = () => void 0;
   export let onSave: () => void | Promise<void> = () => void 0;
   export let onRemoveImage: () => void | Promise<void> = () => void 0;
 
-  const selectPaddingHandler = (paddingType: PaddingType) => {
-    dispatch("paddingChange", {
-      padding: paddingType
-    });
-  };
-
-  const selectGradientHandler = (gradientIndex: number) => {
-    dispatch("gradientChange", {
-      gradientIndex
-    });
-  };
-
-  const selectRoundnessHandler = (roundnessType: RoundnessType) => {
-    dispatch("roundnessChange", {
-      roundness: roundnessType
-    });
-  };
-
-  const selectDropShadowHandler = (dropShadowType: DropShadowType) => {
-    dispatch("dropShadowChange", {
-      dropShadow: dropShadowType
-    });
-  };
-
   const copyHandler = async (event: CustomEvent<{ target: HTMLButtonElement }>) => {
     event.detail.target.disabled = true;
-    await onCopy();
+    await onCopy($appStore.mainBlockImageBlob);
     event.detail.target.disabled = false;
   };
 
@@ -102,7 +84,7 @@
                 "border-b border-white": roundness === roundnessTypes[roundnessKey]
               })
             )}
-            on:click={() => selectRoundnessHandler(roundnessKey)}
+            on:click={() => onRoundnessChange(roundnessKey)}
           >
             {roundnessKey.replace(/^\w/, (c) => c.toUpperCase())}
           </button>
@@ -116,7 +98,7 @@
             class={clsx("text-white", {
               "border-b border-white": padding === paddingTypes[paddingKey]
             })}
-            on:click={() => selectPaddingHandler(paddingKey)}
+            on:click={() => onPaddingChange(paddingKey)}
           >
             {paddingKey.replace(/^\w/, (c) => c.toUpperCase())}
           </button>
@@ -130,7 +112,7 @@
             class={clsx("text-white", {
               "border-b border-white": dropShadow === dropShadowTypes[dropShadowKey]
             })}
-            on:click={() => selectDropShadowHandler(dropShadowKey)}
+            on:click={() => onDropShadowChange(dropShadowKey)}
           >
             {dropShadowKey.replace(/^\w/, (c) => c.toUpperCase())}
           </button>
@@ -148,7 +130,7 @@
                 "ring-2 ring-white": gradientIndex === index
               })
             )}
-            on:click={() => selectGradientHandler(index)}
+            on:click={() => onGradientChange(index)}
           />
         {/each}
       </div>

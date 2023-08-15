@@ -12,7 +12,7 @@ export async function copyBlobToClipBoard(blob: Blob, type: string) {
   ]);
 }
 
-export async function domToBlob(dom: HTMLElement) {
+export async function domToBlob(dom: Element) {
   const scale = 4;
   return await domtoimage.toBlob(dom, {
     quality: 1,

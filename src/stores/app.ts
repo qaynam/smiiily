@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
 export interface AppStore {
-  mainBlockRef: HTMLDivElement | null;
+  mainBlockRef: Element | null;
   mainBlockImageBlob: Blob | null;
 }
 
