@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { fade, slide } from "svelte/transition";
+  import { Toast } from "~/lib/toast";
+  import type { ToastOptions, Toasts, ToastType } from "~/stores/toast";
   import Stack from "../basic/Stack.svelte";
   import CircleCheckFilledIcon from "../icons/CircleCheckFilledIcon.svelte";
   import CircleXIcon from "../icons/CircleXFilledIcon.svelte";
-  import { Toast } from "~/lib/toast";
-  import type { Toasts, ToastOptions, ToastType } from "~/stores/toast";
 
   let toastItems: ToastOptions[] = [];
 
@@ -47,7 +47,7 @@
 <Stack
   class="fixed lg:right-10 lg:bottom-10 lg:left-auto lg:top-auto lg:translate-x-0 top-4 left-0 right-0 lg:px-0 px-4 lg:transform-none transition-all ease-in-out duration-300 gap-3 z-10"
 >
-  {#each toastItems as item, index}
+  {#each toastItems as item}
     <div class="flex justify-center" on:click|stopPropagation|preventDefault>
       <div
         in:slide
