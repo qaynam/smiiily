@@ -27,14 +27,6 @@ export async function domToBlob(dom: HTMLElement) {
   });
 }
 
-export async function copyImage(dom: HTMLElement, blob: Blob | null = null) {
-  let currentBlob = blob;
-  if (currentBlob === null) {
-    currentBlob = await domToBlob(dom);
-  }
-  await copyBlobToClipBoard(currentBlob, "image/png");
-}
-
 export function downloadFromBlob(blob: Blob) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");

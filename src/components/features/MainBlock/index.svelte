@@ -1,5 +1,6 @@
 <script lang="ts">
   import clsx from "clsx";
+  import { afterUpdate } from "svelte";
   import { twMerge } from "tailwind-merge";
   import Card from "~/components/basic/Card.svelte";
   import ImagePicker from "../ImagePicker.svelte";
@@ -11,10 +12,23 @@
   export let selectImageUrl: string;
   export let ref: (el: HTMLDivElement) => void;
   export let onImageChange: (e: CustomEvent<{ file: File }>) => void | Promise<void>;
+
+  let cardRef: HTMLDivElement;
+
+  const refHandler = (el: HTMLDivElement) => {
+    cardRef = el;
+    ref(cardRef);
+  }
+
+  afterUpdate(()=> {
+    if (cardRef) {
+      ref(cardRef);
+    }
+  })
 </script>
 
 <Card
-  {ref}
+  ref={refHandler}
   class={twMerge(
     clsx(
       "lg:w-9/12 transition-all ease-in-out duration-300 min-h-[400px] overflow-hidden bg-transparent lg:block flex",

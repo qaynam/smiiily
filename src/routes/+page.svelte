@@ -4,7 +4,7 @@
   import MainBlock from "~/components/features/MainBlock/index.svelte";
   import Seo from "~/components/features/Seo.svelte";
   import { dropShadowTypes, gradients, paddingTypes, roundnessTypes } from "~/constants";
-  import { copyImage, domToBlob, downloadFromBlob, isIOS } from "~/lib";
+  import { copyBlobToClipBoard, domToBlob, downloadFromBlob } from "~/lib";
   import { toastStore } from "~/stores";
 
   let gradientIndex = 0;
@@ -14,14 +14,16 @@
   let dropShadow = dropShadowTypes.small;
   let mainBlockRef: HTMLDivElement;
   let selectImageBlob: Blob | null = null;
+  let imageBlogLoading = false;
 
   const changeGradientHandler = async (index: number) => {
     gradientIndex = index;
-    await updateSelectImageBlob()
   };
 
   const updateSelectImageBlob = async () => {
+    imageBlogLoading = true;
     selectImageBlob = selectImageUrl ? await domToBlob(mainBlockRef) : null;
+    imageBlogLoading = false;
   };
 
   const imageSelectHandler = async (e: CustomEvent<{ file: File }>) => {
@@ -39,19 +41,20 @@
     }
   };
 
+  const mainBlockRefHandler = (el: HTMLDivElement) => {
+    mainBlockRef = el
+  }
+
   const changePaddingHandler = async (paddingKey: keyof typeof paddingTypes) => {
     padding = paddingTypes[paddingKey];
-    await updateSelectImageBlob();
   };
 
   const changeRoundnessHandler = async (roundnessKey: keyof typeof roundnessTypes) => {
     roundness = roundnessTypes[roundnessKey];
-    await updateSelectImageBlob();
   };
 
   const changeDropShadowHandler = async (dropShadowKey: keyof typeof dropShadowTypes) => {
     dropShadow = dropShadowTypes[dropShadowKey];
-    await updateSelectImageBlob();
   };
 
   const copyHandler = async () => {
@@ -60,13 +63,14 @@
       return;
     }
 
-    if(!selectImageBlob) {
+    if(!selectImageBlob || imageBlogLoading) {
       toastStore.show("Please wait for the image to load!", "error", 5000);
       return;
     }
 
     try {
-      await copyImage(mainBlockRef, selectImageBlob);
+      await updateSelectImageBlob()
+      await copyBlobToClipBoard(selectImageBlob, "image/png");
       toastStore.show("Copied to clipboard!", "success", 5000);
     } catch (error) {
       toastStore.show("Failed to Copy Image!", "error", 5000);
@@ -78,8 +82,15 @@
     if (!mainBlockRef) {
       return;
     }
-    const blob = await domToBlob(mainBlockRef);
-    downloadFromBlob(blob);
+    
+    await updateSelectImageBlob()
+
+    if(!selectImageBlob || imageBlogLoading) {
+      toastStore.show("Please wait for the image to load!", "error", 5000);
+      return;
+    }
+    
+    downloadFromBlob(selectImageBlob);
   };
 
   const removeImageHandler = () => {
@@ -103,7 +114,7 @@
       class="min-w-5xl flex lg:flex-row flex-col lg:space-x-10 space-x-0 space-y-10 lg:space-y-0"
     >
       <MainBlock
-        ref={(el) => (mainBlockRef = el)}
+        ref={mainBlockRefHandler}
         {selectImageUrl}
         {gradient}
         {padding}
