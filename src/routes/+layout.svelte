@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Stack from "~/components/basic/Stack.svelte";
-  import InstallPrompt from "~/components/features/InstallPrompt.svelte";
-  import ToastSlot from "~/components/features/ToastSlot.svelte";
   import { initPWA } from "~/lib/pwa";
   import "~/styles/app.css";
+  import Stack from "~/views/components/basic/Stack.svelte";
+  import InstallPrompt from "~/views/components/features/InstallPrompt.svelte";
+  import ToastSlot from "~/views/components/features/ToastSlot.svelte";
 
   let showInstallPrompt = false;
   let deferredPrompt: BeforeInstallPromptEvent | null = null;

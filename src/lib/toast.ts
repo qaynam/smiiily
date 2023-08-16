@@ -1,4 +1,4 @@
-import { toastStore, type ToastType } from "~/stores/toast";
+import { toastStore, type ToastType } from "~/application/stores/toast";
 
 export const Toast = {
   subscribe: toastStore.subscribe,

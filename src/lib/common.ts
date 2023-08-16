@@ -49,3 +49,7 @@ export function isIOS() {
 export function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function camelToPascal(str: string) {
+  return str.replace(/^\w/, (c) => c.toUpperCase());
+}
