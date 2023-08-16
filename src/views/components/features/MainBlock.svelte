@@ -2,38 +2,47 @@
   import clsx from "clsx";
   import { twMerge } from "tailwind-merge";
   import { appStore } from "~/application/stores/app";
-  import { domToBlob } from "~/lib/common";
+  import { domToBlob, isSameBlob } from "~/lib/common";
   import Card from "../basic/Card.svelte";
   import ImagePicker from "./ImagePicker.svelte";
   import type { AppService } from "~/application/services/AppService";
-  import { onMount } from "svelte";
+  import { afterUpdate, onMount, tick } from "svelte";
   import { App } from "~/application/main";
-  import { gradients } from "~/constants";
+  import { dropShadows, gradients, paddings, roundness } from "~/constants";
 
   let appService: AppService | undefined;
+  let mainBlockRef: Element | null = null;
 
   const imageSelectedHandler = ({ file }: { file: File }) => {
     appService?.updateSelectedImage(file);
   };
 
   const updateHandler = async (el: HTMLDivElement | null) => {
-    if (el) {
-      appStore.update((state) => {
-        const newState = state;
-        newState.mainBlockRef = el;
-        return newState;
-      });
+    if (el && !getMainBlockElement()) {
+      await tick();
+      await appService?.updateMainBlockElement(el);
     }
   };
 
-  $: currentGradient = $appStore.gradient;
-  $: currentPadding = $appStore.padding;
-  $: currentRoundness = $appStore.roundness;
+  $: currentGradient = gradients[$appStore.gradient];
+  $: currentPadding = paddings[$appStore.padding];
+  $: currentRoundness = roundness[$appStore.roundness];
   $: selectImageUrl = $appStore.selectedImage;
-  $: currentDropShadow = $appStore.dropShadow;
+  $: currentDropShadow = dropShadows[$appStore.dropShadow];
+
+  const getMainBlockElement = () => {
+    let el: Element | null = null;
+    appStore.subscribe((store) => (el = store.mainBlockRef))();
+    return el;
+  };
 
   onMount(() => {
     appService = App.getAppService();
+  });
+
+  afterUpdate(async () => {
+    await tick();
+    console.log("Updated");
   });
 </script>
 
@@ -42,13 +51,13 @@
   class={twMerge(
     clsx(
       "lg:w-9/12 transition-all ease-in-out duration-300 min-h-[400px] overflow-hidden bg-transparent lg:block flex",
-      gradients[currentGradient],
+      currentGradient,
       currentPadding,
       currentRoundness
     )
   )}
 >
-  <div class="flex items-center justify-center m-auto w-full h-full">
+  <div class="flex items-center justify-center m-auto min-h-full w-full h-full">
     {#if selectImageUrl}
       <img
         src={selectImageUrl}

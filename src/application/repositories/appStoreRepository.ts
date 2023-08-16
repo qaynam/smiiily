@@ -49,7 +49,7 @@ export class AppStoreRepository implements IAppStoreRepository {
     });
   }
 
-  updateSelectedImage(image: string): void {
+  updateSelectedImage(image: string | null): void {
     this.store.update((state) => {
       const newState = state;
       newState.selectedImage = image;
@@ -58,7 +58,16 @@ export class AppStoreRepository implements IAppStoreRepository {
     });
   }
 
-  updateMainBlockDomImage(image: Blob): void {
+  updateMainBlockElement(mainBlockElement: Element | null): void {
+    this.store.update((state) => {
+      const newState = state;
+      newState.mainBlockRef = mainBlockElement;
+
+      return newState;
+    });
+  }
+
+  updateMainBlockDomImage(image: Blob | null): void {
     this.store.update((state) => {
       const newState = state;
       newState.mainBlockDomImage = image;

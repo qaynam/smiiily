@@ -18,6 +18,7 @@ export interface IAppStore {
   gradient: GradientType;
   dropShadow: DropShadowType;
   selectedImage: string | null;
+  domImageGenerating: boolean;
   mainBlockRef: Element | null;
   mainBlockDomImage: Blob | null;
 }

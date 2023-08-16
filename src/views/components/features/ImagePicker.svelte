@@ -7,16 +7,11 @@
   import { twMerge } from "tailwind-merge";
   import ArrowBarToDown from "../icons/ArrowBarToDown.svelte";
 
-  type EventParams = {
-    change: {
-      file: File;
-    };
-  };
-
-  const dispatch = createEventDispatcher<EventParams>();
   let imagePickerRef: HTMLLabelElement;
   let dragOver = false;
   export let onImageSelected: ({ file }: { file: File }) => void | Promise<void> = () => void 0;
+  export let style: string = "";
+  export let id: string = "";
 
   const changeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target && e.currentTarget.files && e.currentTarget.files.length > 0) {
@@ -93,6 +88,8 @@
 
 <label
   bind:this={imagePickerRef}
+  {id}
+  {style}
   for="image"
   class={twMerge(
     clsx(

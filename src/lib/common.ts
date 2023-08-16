@@ -1,4 +1,5 @@
 import domtoimage from "dom-to-image";
+import { Buffer } from "buffer";
 
 export async function copyBlobToClipBoard(blob: Blob, type: string) {
   if (!navigator.clipboard) {
@@ -14,17 +15,34 @@ export async function copyBlobToClipBoard(blob: Blob, type: string) {
 
 export async function domToBlob(dom: Element) {
   const scale = 4;
-  return await domtoimage.toBlob(dom, {
-    quality: 1,
-    width: dom.clientWidth * scale,
-    height: dom.clientHeight * scale,
-    style: {
-      transform: "scale(" + scale + ")",
-      transformOrigin: "top left",
-      width: dom.clientWidth + "px",
-      height: dom.clientHeight + "px"
-    }
-  });
+  if (!dom) {
+    throw new Error("dom is null");
+  }
+
+  if (!dom.clientWidth || !dom.clientHeight) {
+    throw new Error("dom.clientWidth or dom.clientHeight is null or 0");
+  }
+
+  try {
+    const result = await domtoimage.toBlob(dom, {
+      quality: 1,
+      width: dom.clientWidth * scale,
+      height: dom.clientHeight * scale,
+      cacheBust: false,
+      bgcolor: "transparent",
+      style: {
+        transform: "scale(" + scale + ")",
+        transformOrigin: "top left",
+        width: dom.clientWidth + "px",
+        height: dom.clientHeight + "px"
+      }
+    });
+
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw new Error("domToBlob error");
+  }
 }
 
 export function downloadFromBlob(blob: Blob) {

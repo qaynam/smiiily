@@ -8,7 +8,7 @@
     ShadowIcon
   } from "@icons/index";
   import { clsx } from "clsx";
-  import { onMount, tick } from "svelte";
+  import { onMount } from "svelte";
   import { twMerge } from "tailwind-merge";
   import { App } from "~/application/main";
   import type { AppService } from "~/application/services/AppService";
@@ -20,7 +20,7 @@
     gradients,
     gradientTypes
   } from "~/constants";
-  import { camelToPascal, copyBlobToClipBoard } from "~/lib/common";
+  import { camelToPascal, copyBlobToClipBoard, domToBlob } from "~/lib/common";
   import Card from "../../basic/Card.svelte";
   import Stack from "../../basic/Stack.svelte";
   import ControlPanelRow from "./ControlPanelRow.svelte";
@@ -32,18 +32,37 @@
   import type { PaddingType } from "~/application/models/appStore";
   import Button from "../../basic/Button.svelte";
   import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
+  import { Toast } from "~/lib/toast";
 
   let appService: AppService | undefined;
 
-  const onRemoveImage = () => {
+  const removeImage = () => {
     appService?.removeImage();
   };
 
-  const saveImage = () => {};
+  const saveImage = () => {
+    if (mainBlockDomImage) {
+      const url = URL.createObjectURL(mainBlockDomImage);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "image.png";
+      link.click();
+      URL.revokeObjectURL(url);
+    } else {
+      Toast.show("No image to save", "error");
+    }
+  };
 
   const copyImage = async () => {
     if (mainBlockDomImage) {
-      await copyBlobToClipBoard(mainBlockDomImage, mainBlockDomImage.type);
+      try {
+        await copyBlobToClipBoard(mainBlockDomImage, mainBlockDomImage.type);
+        Toast.show("Copied to clipboard", "success");
+      } catch (error) {
+        Toast.show("Failed to copy", "error");
+      }
+    } else {
+      Toast.show("No image to copy", "error");
     }
   };
 
@@ -69,15 +88,12 @@
   $: currentGradient = $appStore.gradient;
   $: imageSelected = !!$appStore.selectedImage;
   $: mainBlockDomImage = $appStore.mainBlockDomImage;
+  $: loading = $appStore.domImageGenerating;
 
   onMount(() => {
     appService = App.getAppService();
   });
 </script>
-
-<pre>
-  {JSON.stringify($appStore, null, 2)}
-</pre>
 
 <Card class="border border-gray-600 lg:w-3/12 w-full self-start">
   <Stack class="gap-10">
@@ -139,17 +155,21 @@
     </ControlPanelRow>
     <hr class="border-gray-600" />
     <div class="flex justify-between gap-4">
-      <Button class="w-full" outline on:click={copyImage}>
+      <Button disabled={loading} class="w-full" outline on:click={copyImage}>
         <CopyIcon slot="icon" />
         <span> Copy </span>
       </Button>
-      <Button class="bg-blue-600 hover:bg-blue-500 text-white w-full" on:click={saveImage}>
+      <Button
+        disabled={loading}
+        class="bg-blue-600 hover:bg-blue-500 text-white w-full"
+        on:click={saveImage}
+      >
         <DownloadIcon slot="icon" />
         <span> Save </span>
       </Button>
     </div>
     {#if imageSelected}
-      <Button outline on:click={onRemoveImage}>
+      <Button disabled={loading} outline on:click={removeImage}>
         <RotateClockWiseIcon slot="icon" />
         <span> Remove Image </span>
       </Button>

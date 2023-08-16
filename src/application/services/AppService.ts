@@ -1,5 +1,4 @@
-import { domToBlob } from "~/lib/common";
-import type { DropShadowType, PaddingType, RoundnessType, GradientType } from "../models/appStore";
+import type { DropShadowType, GradientType, PaddingType, RoundnessType } from "../models/appStore";
 import type { IAppStoreRepository } from "../repositories/appStoreRepository.interface";
 
 export class AppService {
@@ -21,20 +20,23 @@ export class AppService {
     this.appStoreRepository.updateGradient(gradient);
   }
 
+  async updateMainBlockElement(mainBlockElement: Element) {
+    this.appStoreRepository.updateMainBlockElement(mainBlockElement);
+  }
+
+  async updateMainBlockDomImage(blob: Blob) {
+    this.appStoreRepository.updateMainBlockDomImage(blob);
+  }
+
   removeImage() {
     if (this.appStoreRepository.getImage()) {
-      this.appStoreRepository.updateSelectedImage("");
+      this.appStoreRepository.updateSelectedImage(null);
+      this.appStoreRepository.updateMainBlockDomImage(null);
     }
   }
 
   async updateSelectedImage(image: File) {
     const imageUrl = URL.createObjectURL(image);
-    const mainBlockElement = this.appStoreRepository.getMainBlockElement();
-    if (!mainBlockElement) {
-      return;
-    }
-    const domImage = await domToBlob(mainBlockElement);
     this.appStoreRepository.updateSelectedImage(imageUrl);
-    this.appStoreRepository.updateMainBlockDomImage(domImage);
   }
 }
