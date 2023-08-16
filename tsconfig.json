@@ -11,7 +11,8 @@
     "strict": true
   },
   "path": {
-    "~/*": ["./src/*"]
+    "~/*": ["./src/*"],
+    "@icons/*": ["./src/views/components/icons/*"]
   }
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
   //
