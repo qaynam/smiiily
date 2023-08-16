@@ -20,10 +20,10 @@
     content="Smiiily is a gradient background image generator for social media. You can generate gradient background images for Twitter, Facebook, Instagram, and more."
   />
   <meta name="twitter:creator" content="@SmiiilyApp" />
-  <meta name="twitter:image" content="https://smiiily.com/og-image.png" />
+  <meta name="twitter:image" content="https://smiiily.app/og-image.png" />
   <!-- open graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://smiiily.com/" />
+  <meta property="og:url" content="https://smiiily.app/" />
   <meta
     property="og:title"
     content="Smiiily - Gradient Background Image Generator for Social Media"
@@ -32,8 +32,7 @@
     property="og:description"
     content="Smiiily is a gradient background image generator for social media. You can generate gradient background images for Twitter, Facebook, Instagram, and more."
   />
-  <meta property="og:image" content="https://smiiily.com/og-image.png" />
+  <meta property="og:image" content="https://smiiily.app/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  
 </svelte:head>
