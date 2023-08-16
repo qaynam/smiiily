@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SvelteComponent } from "svelte";
-  import Stack from "~/components/basic/Stack.svelte";
+  import Stack from "../../basic/Stack.svelte";
 
   export let labelIcon: new (...args: any[]) => SvelteComponent;
   export let label: string;
@@ -11,5 +11,7 @@
     <svelte:component this={labelIcon} />
     {label}
   </span>
-  <slot />
+  <div class="gap-3 flex flex-wrap">
+    <slot />
+  </div>
 </Stack>

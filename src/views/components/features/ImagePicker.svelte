@@ -16,10 +16,11 @@
   const dispatch = createEventDispatcher<EventParams>();
   let imagePickerRef: HTMLLabelElement;
   let dragOver = false;
+  export let onImageSelected: ({ file }: { file: File }) => void | Promise<void> = () => void 0;
 
   const changeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (e.target && e.currentTarget.files) {
-      dispatch("change", {
+    if (e.target && e.currentTarget.files && e.currentTarget.files.length > 0) {
+      onImageSelected({
         file: e.currentTarget.files[0]
       });
     }
@@ -42,7 +43,7 @@
         return;
       }
 
-      dispatch("change", {
+      onImageSelected({
         file
       });
     }
@@ -69,7 +70,7 @@
     if (e.dataTransfer && e.dataTransfer.files) {
       const file = e.dataTransfer.files[0];
       if (file) {
-        dispatch("change", {
+        onImageSelected({
           file
         });
       }
