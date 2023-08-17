@@ -1,16 +1,33 @@
 import type { IAppStoreData } from "../stores/app";
 import type { IAppStoreRepository } from "./appStoreRepository.interface";
-import type { GradientType, PaddingType, RoundnessType } from "../models/appStore";
+import type { DropShadowType, GradientType, PaddingType, RoundnessType } from "../models/appStore";
+import { get } from "svelte/store";
 
 export class AppStoreRepository implements IAppStoreRepository {
   constructor(private readonly store: IAppStoreData) {}
 
   getImage() {
-    return this.store.get("selectedImage");
+    return get(this.store).selectedImage;
   }
 
   getMainBlockElement() {
-    return this.store.get("mainBlockRef");
+    return get(this.store).mainBlockRef;
+  }
+
+  getRoundness(): RoundnessType {
+    return get(this.store).roundness;
+  }
+
+  getPadding(): PaddingType {
+    return get(this.store).padding;
+  }
+
+  getDropShadow(): DropShadowType {
+    return get(this.store).dropShadow;
+  }
+
+  getGradient(): GradientType {
+    return get(this.store).gradient;
   }
 
   updateRoundness(roundness: RoundnessType): void {
@@ -62,15 +79,6 @@ export class AppStoreRepository implements IAppStoreRepository {
     this.store.update((state) => {
       const newState = state;
       newState.mainBlockRef = mainBlockElement;
-
-      return newState;
-    });
-  }
-
-  updateMainBlockDomImage(image: Blob | null): void {
-    this.store.update((state) => {
-      const newState = state;
-      newState.mainBlockDomImage = image;
 
       return newState;
     });

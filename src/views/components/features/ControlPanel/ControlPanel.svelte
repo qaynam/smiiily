@@ -11,28 +11,28 @@
   import { onMount } from "svelte";
   import { twMerge } from "tailwind-merge";
   import { App } from "~/application/main";
-  import type { AppService } from "~/application/services/AppService";
-  import { appStore } from "~/application/stores/app";
-  import {
-    paddingTypes,
-    roundnessTypes,
-    dropShadowTypes,
-    gradients,
-    gradientTypes
-  } from "~/constants";
-  import { camelToPascal, copyBlobToClipBoard, domToBlob } from "~/lib/common";
-  import Card from "../../basic/Card.svelte";
-  import Stack from "../../basic/Stack.svelte";
-  import ControlPanelRow from "./ControlPanelRow.svelte";
+  import type { PaddingType } from "~/application/models/appStore";
   import type {
     DropShadowType,
-    RoundnessType,
-    GradientType
+    GradientType,
+    RoundnessType
   } from "~/application/models/appStore.js";
-  import type { PaddingType } from "~/application/models/appStore";
-  import Button from "../../basic/Button.svelte";
-  import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
+  import type { AppService } from "~/application/services/AppService";
+  import { appStore, domImage } from "~/application/stores/app";
+  import {
+    dropShadowTypes,
+    gradientTypes,
+    gradients,
+    paddingTypes,
+    roundnessTypes
+  } from "~/constants";
+  import { camelToPascal, copyBlobToClipBoard } from "~/lib/common";
   import { Toast } from "~/lib/toast";
+  import Button from "../../basic/Button.svelte";
+  import Card from "../../basic/Card.svelte";
+  import Stack from "../../basic/Stack.svelte";
+  import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
+  import ControlPanelRow from "./ControlPanelRow.svelte";
 
   let appService: AppService | undefined;
 
@@ -86,9 +86,8 @@
   $: currentPadding = $appStore.padding;
   $: currentDropShadow = $appStore.dropShadow;
   $: currentGradient = $appStore.gradient;
-  $: imageSelected = !!$appStore.selectedImage;
-  $: mainBlockDomImage = $appStore.mainBlockDomImage;
-  $: loading = $appStore.domImageGenerating;
+  $: mainBlockDomImage = $domImage.blob;
+  $: loading = $domImage.processing;
 
   onMount(() => {
     appService = App.getAppService();
@@ -168,7 +167,7 @@
         <span> Save </span>
       </Button>
     </div>
-    {#if imageSelected}
+    {#if mainBlockDomImage}
       <Button disabled={loading} outline on:click={removeImage}>
         <RotateClockWiseIcon slot="icon" />
         <span> Remove Image </span>

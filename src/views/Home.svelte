@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import type { AppService } from "~/application/services/AppService";
   import Stack from "./components/basic/Stack.svelte";
-  import Header from "./components/features/Header.svelte";
-  import Seo from "./components/features/Seo.svelte";
-  import { App } from "~/application/main";
   import ControlPanel from "./components/features/ControlPanel/ControlPanel.svelte";
+  import Header from "./components/features/Header.svelte";
   import MainBlock from "./components/features/MainBlock.svelte";
+  import Seo from "./components/features/Seo.svelte";
 </script>
 
 <Seo />

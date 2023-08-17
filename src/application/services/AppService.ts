@@ -5,7 +5,9 @@ export class AppService {
   constructor(private readonly appStoreRepository: IAppStoreRepository) {}
 
   updateRoundness(roundness: RoundnessType) {
-    this.appStoreRepository.updateRoundness(roundness);
+    if (roundness !== this.appStoreRepository.getRoundness()) {
+      this.appStoreRepository.updateRoundness(roundness);
+    }
   }
 
   updatePadding(padding: PaddingType) {
@@ -20,18 +22,13 @@ export class AppService {
     this.appStoreRepository.updateGradient(gradient);
   }
 
-  async updateMainBlockElement(mainBlockElement: Element) {
+  updateMainBlockElement(mainBlockElement: Element) {
     this.appStoreRepository.updateMainBlockElement(mainBlockElement);
-  }
-
-  async updateMainBlockDomImage(blob: Blob) {
-    this.appStoreRepository.updateMainBlockDomImage(blob);
   }
 
   removeImage() {
     if (this.appStoreRepository.getImage()) {
       this.appStoreRepository.updateSelectedImage(null);
-      this.appStoreRepository.updateMainBlockDomImage(null);
     }
   }
 

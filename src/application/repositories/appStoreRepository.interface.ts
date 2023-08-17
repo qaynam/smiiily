@@ -7,8 +7,11 @@ export interface IAppStoreRepository {
   updateGradient(gradient: GradientType): void;
   updateSelectedImage(image: string | null): void;
   updateMainBlockElement(mainBlockElement: Element | null): void;
-  updateMainBlockDomImage(image: Blob | null): void;
 
   getImage(): string | null;
   getMainBlockElement(): Element | null;
+  getRoundness(): RoundnessType;
+  getPadding(): PaddingType;
+  getDropShadow(): DropShadowType;
+  getGradient(): GradientType;
 }

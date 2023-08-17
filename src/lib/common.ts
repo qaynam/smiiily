@@ -1,5 +1,4 @@
 import domtoimage from "dom-to-image";
-import { Buffer } from "buffer";
 
 export async function copyBlobToClipBoard(blob: Blob, type: string) {
   if (!navigator.clipboard) {
