@@ -16,6 +16,14 @@
     appService?.updateSelectedImage(file);
   };
 
+  const domChangeHandler = async (el: HTMLDivElement | null) => {
+    if (!el) {
+      return;
+    }
+    await tick();
+    appService?.updateMainBlockElement(el);
+  };
+
   $: currentGradient = gradients[$appStore.gradient];
   $: currentPadding = paddings[$appStore.padding];
   $: currentRoundness = roundness[$appStore.roundness];
@@ -24,45 +32,33 @@
 
   onMount(async () => {
     appService = App.getAppService();
-    if (ref) {
-      await tick();
-      appService?.updateMainBlockElement(ref);
-    }
-  });
-
-  afterUpdate(async () => {
-    console.info("Component Updated !");
   });
 </script>
 
-<div class="lg:w-9/12 w-full bg-transparent">
-  <Card
-    onMounted={(el) => {
-      el && (ref = el);
-    }}
-    class={twMerge(
-      clsx(
-        "transition-all ease-in-out duration-300 lg:min-h-[800px] min-h-[400px] overflow-hidden flex",
-        currentGradient,
-        currentPadding,
-        currentRoundness
-      )
-    )}
-  >
-    <div class="flex items-center justify-center m-auto min-h-full w-full h-full">
-      {#if selectImageUrl}
-        <img
-          src={selectImageUrl}
-          class={twMerge(
-            "mx-auto overflow-hidden object-cover transition-all duration-300",
-            currentRoundness,
-            currentDropShadow
-          )}
-          alt=""
-        />
-      {:else}
-        <ImagePicker onImageSelected={imageSelectedHandler} />
-      {/if}
-    </div>
-  </Card>
-</div>
+<Card
+  onMounted={domChangeHandler}
+  class={twMerge(
+    clsx(
+      "lg:w-9/12 w-full bg-transparent transition-all ease-in-out duration-300 lg:min-h-[800px] min-h-[400px] overflow-hidden flex",
+      currentGradient,
+      currentPadding,
+      currentRoundness
+    )
+  )}
+>
+  <div class="flex items-center justify-center m-auto min-h-full w-full h-full">
+    {#if selectImageUrl}
+      <img
+        src={selectImageUrl}
+        class={twMerge(
+          "mx-auto overflow-hidden object-cover transition-all duration-300",
+          currentRoundness,
+          currentDropShadow
+        )}
+        alt=""
+      />
+    {:else}
+      <ImagePicker onImageSelected={imageSelectedHandler} />
+    {/if}
+  </div>
+</Card>

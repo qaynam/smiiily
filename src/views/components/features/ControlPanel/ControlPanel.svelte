@@ -33,6 +33,8 @@
   import Stack from "../../basic/Stack.svelte";
   import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
   import ControlPanelRow from "./ControlPanelRow.svelte";
+  import AnimatedLoading from "../../basic/AnimatedLoading.svelte";
+  import Overlay from "../../shared/Overlay.svelte";
 
   let appService: AppService | undefined;
 
@@ -153,25 +155,28 @@
       </div>
     </ControlPanelRow>
     <hr class="border-gray-600" />
-    <div class="flex justify-between gap-4">
-      <Button disabled={loading} class="w-full" outline on:click={copyImage}>
-        <CopyIcon slot="icon" />
-        <span> Copy </span>
-      </Button>
-      <Button
-        disabled={loading}
-        class="bg-blue-600 hover:bg-blue-500 text-white w-full"
-        on:click={saveImage}
-      >
-        <DownloadIcon slot="icon" />
-        <span> Save </span>
-      </Button>
+    <div class="flex flex-col gap-4">
+      <Overlay show={loading}>
+        <AnimatedLoading />
+      </Overlay>
+      <div class="flex justify-between gap-4">
+        <Button leftIcon={CopyIcon} {loading} class={"w-full"} outline on:click={copyImage}>
+          <span> Copy </span>
+        </Button>
+        <Button
+          {loading}
+          leftIcon={DownloadIcon}
+          class="bg-blue-600 hover:bg-blue-500 text-white w-full"
+          on:click={saveImage}
+        >
+          <span> Save </span>
+        </Button>
+      </div>
+      {#if mainBlockDomImage}
+        <Button {loading} leftIcon={RotateClockWiseIcon} outline on:click={removeImage}>
+          <span> Remove Image </span>
+        </Button>
+      {/if}
     </div>
-    {#if mainBlockDomImage}
-      <Button disabled={loading} outline on:click={removeImage}>
-        <RotateClockWiseIcon slot="icon" />
-        <span> Remove Image </span>
-      </Button>
-    {/if}
   </Stack>
 </Card>

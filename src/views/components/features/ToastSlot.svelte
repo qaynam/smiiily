@@ -10,7 +10,7 @@
   let toastItems: ToastOptions[] = [];
 
   const toastChangeHandler = (value: Toasts) => {
-    toastItems = Object.values(value).reverse() as ToastOptions[];
+    toastItems = Object.values(value) as ToastOptions[];
   };
 
   onMount(() => {
