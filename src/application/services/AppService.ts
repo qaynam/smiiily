@@ -11,15 +11,21 @@ export class AppService {
   }
 
   updatePadding(padding: PaddingType) {
-    this.appStoreRepository.updatePadding(padding);
+    if (padding !== this.appStoreRepository.getPadding()) {
+      this.appStoreRepository.updatePadding(padding);
+    }
   }
 
   updateDropShadow(dropShadow: DropShadowType) {
-    this.appStoreRepository.updateDropShadow(dropShadow);
+    if (dropShadow !== this.appStoreRepository.getDropShadow()) {
+      this.appStoreRepository.updateDropShadow(dropShadow);
+    }
   }
 
   updateGradient(gradient: GradientType) {
-    this.appStoreRepository.updateGradient(gradient);
+    if (gradient !== this.appStoreRepository.getGradient()) {
+      this.appStoreRepository.updateGradient(gradient);
+    }
   }
 
   updateMainBlockElement(mainBlockElement: Element) {
