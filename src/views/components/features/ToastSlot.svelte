@@ -2,10 +2,10 @@
   import { onMount } from "svelte";
   import { fade, slide } from "svelte/transition";
   import { Toast } from "~/lib/toast";
-  import type { ToastOptions, Toasts, ToastType } from "~/stores/toast";
   import Stack from "../basic/Stack.svelte";
   import CircleCheckFilledIcon from "../icons/CircleCheckFilledIcon.svelte";
   import CircleXIcon from "../icons/CircleXFilledIcon.svelte";
+  import type { ToastOptions, ToastType, Toasts } from "~/application/stores/toast";
 
   let toastItems: ToastOptions[] = [];
 

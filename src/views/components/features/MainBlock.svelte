@@ -22,12 +22,6 @@
   $: selectImageUrl = $appStore.selectedImage;
   $: currentDropShadow = dropShadows[$appStore.dropShadow];
 
-  const getMainBlockElement = () => {
-    let el: Element | null = null;
-    appStore.subscribe((store) => (el = store.mainBlockRef))();
-    return el;
-  };
-
   onMount(async () => {
     appService = App.getAppService();
     if (ref) {
@@ -41,8 +35,11 @@
   });
 </script>
 
-<div class="lg:w-9/12 w-full bg-transparent" bind:this={ref}>
+<div class="lg:w-9/12 w-full bg-transparent">
   <Card
+    onMounted={(el) => {
+      el && (ref = el);
+    }}
     class={twMerge(
       clsx(
         "transition-all ease-in-out duration-300 lg:min-h-[800px] min-h-[400px] overflow-hidden flex",

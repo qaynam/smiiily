@@ -36,16 +36,15 @@
     deferredPrompt = null;
   };
 
-  onMount(() => {
-    const unsubscribe = initPWA({
+  onMount(() =>
+    initPWA({
       onWindowLoad: appLoad,
       onBeforeInstallPrompt: beforeInstallPrompt,
       onAppInstalled: appInstalled
-    });
-    return () => unsubscribe();
-  });
+    })
+  );
 </script>
 
 {#if showInstallPrompt}
-  <InstallPrompt onInstallClick={installHandler} />
+  <InstallPrompt onClose={() => (showInstallPrompt = false)} onInstallClick={installHandler} />
 {/if}
