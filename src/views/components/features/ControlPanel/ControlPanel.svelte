@@ -26,15 +26,14 @@
     paddingTypes,
     roundnessTypes
   } from "~/constants";
-  import { camelToPascal, copyBlobToClipBoard } from "~/lib/common";
+  import { camelToPascal, copyBlobToClipBoard } from "~/lib/utils";
   import { Toast } from "~/lib/toast";
-  import Button from "../../basic/Button.svelte";
-  import Card from "../../basic/Card.svelte";
-  import Stack from "../../basic/Stack.svelte";
   import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
   import ControlPanelRow from "./ControlPanelRow.svelte";
-  import AnimatedLoading from "../../basic/AnimatedLoading.svelte";
-  import Overlay from "../../shared/Overlay.svelte";
+  import AnimatedLoading from "~/views/components/basic/AnimatedLoading.svelte";
+  import Overlay from "~/views/components/shared/Overlay.svelte";
+  import { downloadFromBlob } from "~/lib/utils";
+  import { Button, Card, Stack } from "../../basic";
 
   let appService: AppService | undefined;
 
@@ -42,14 +41,9 @@
     appService?.removeImage();
   };
 
-  const saveImage = () => {
+  const saveImage = async () => {
     if (mainBlockDomImage) {
-      const url = URL.createObjectURL(mainBlockDomImage);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "image.png";
-      link.click();
-      URL.revokeObjectURL(url);
+      downloadFromBlob(mainBlockDomImage);
     } else {
       Toast.show("No image to save", "error");
     }

@@ -53,20 +53,6 @@ export function downloadFromBlob(blob: Blob) {
   URL.revokeObjectURL(url);
 }
 
-export function isSafari() {
-  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-}
-
-export function isIOS() {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) || isSafari();
-}
-
-export function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export function camelToPascal(str: string) {
   return str.replace(/^\w/, (c) => c.toUpperCase());
 }
