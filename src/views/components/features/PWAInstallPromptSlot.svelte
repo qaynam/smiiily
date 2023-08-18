@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { GA, GAActions } from "~/lib/ga";
   import { initPWA } from "~/lib/pwa";
   import InstallPrompt from "~/views/components/features/PWAInstallPrompt.svelte";
 
@@ -7,6 +8,7 @@
   let deferredPrompt: BeforeInstallPromptEvent | null = null;
 
   const installHandler = async () => {
+    GA.sendEvent(GAActions.CLICK, "pwa-prompt-install");
     // Hide the app provided install promotion
     showInstallPrompt = false;
     // Show the install prompt
@@ -36,6 +38,11 @@
     deferredPrompt = null;
   };
 
+  const closeHandler = () => {
+    GA.sendEvent(GAActions.CLICK, "pwa-prompt-close");
+    showInstallPrompt = false;
+  };
+
   onMount(() =>
     initPWA({
       onWindowLoad: appLoad,
@@ -46,5 +53,5 @@
 </script>
 
 {#if showInstallPrompt}
-  <InstallPrompt onClose={() => (showInstallPrompt = false)} onInstallClick={installHandler} />
+  <InstallPrompt onClose={closeHandler} onInstallClick={installHandler} />
 {/if}
