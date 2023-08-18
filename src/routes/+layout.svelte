@@ -1,8 +1,14 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import "~/styles/app.css";
   import Stack from "~/views/components/basic/Stack.svelte";
   import PwaInstallPromptSlot from "~/views/components/features/PWAInstallPromptSlot.svelte";
   import ToastSlot from "~/views/components/features/ToastSlot.svelte";
+
+  onMount(async () => {
+    const GA = (await import("$lib/ga")).GA;
+    await GA.load();
+  });
 </script>
 
 <main class="flex-grow bg-slate-950 relative md:pt-10 pt-6 flex flex-col gap-8 min-w-[375px]">
