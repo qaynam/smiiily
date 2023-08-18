@@ -8,7 +8,6 @@
 
   $: {
     if (ref && ref.parentElement) {
-      console.log(ref.parentElement);
       ref.parentElement.style.position = "relative";
     }
   }
