@@ -7,5 +7,7 @@
     <img src="/favicon.png" class="lg:w-10 lg:h-10 h-8 w-8" alt="Smiiily Logo" />
     Smiiily
   </h1>
-  <h2 class="text-gray-400 lg:text-xl text-lg">Gradient Background Image Generator</h2>
+  <h2 class="text-gray-400 lg:text-xl text-lg lg:max-w-lg">
+    Gradient background image generator for social media.
+  </h2>
 </Stack>
