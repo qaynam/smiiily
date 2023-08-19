@@ -1,5 +1,5 @@
 import { derived, writable, type Writable } from "svelte/store";
-import { domToBlob } from "~/lib/utils";
+import { domToBlob } from "~/lib/core";
 import type { IAppStore } from "../models/appStore";
 
 const prevStore: IAppStore = {
@@ -45,7 +45,7 @@ export const domImage = derived<Writable<IAppStore>, IAppStoreDomImage>(
       timer = setTimeout(async () => {
         const blob = await domToBlob(ref);
         set({
-          blob,
+          blob: typeof blob !== "string" ? blob : null,
           processing: false
         });
       }, 1000);

@@ -1,4 +1,10 @@
-import type { DropShadowType, GradientType, PaddingType, RoundnessType } from "../models/appStore";
+import type {
+  DropShadowType,
+  GradientType,
+  ImageTypes,
+  PaddingType,
+  RoundnessType
+} from "../models/appStore";
 import type { IAppStoreRepository } from "../repositories/appStoreRepository.interface";
 
 export class AppService {
@@ -30,6 +36,12 @@ export class AppService {
 
   updateMainBlockElement(mainBlockElement: Element) {
     this.appStoreRepository.updateMainBlockElement(mainBlockElement);
+  }
+
+  updateImageType(imageType: ImageTypes) {
+    if (imageType !== this.appStoreRepository.getImageType()) {
+      this.appStoreRepository.updateImageType(imageType);
+    }
   }
 
   removeImage() {

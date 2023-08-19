@@ -11,12 +11,14 @@ export type GradientType =
   | "rose-to-teal-horizontal-gradient"
   | "transparent-to-white-diagonal-gradient-bottom-right-with-orange-hint"
   | "dark-gray-to-black-horizontal-gradient";
+export type ImageTypes = "image/png" | "image/jpeg" | "image/gif";
 
 export interface IAppStore {
   roundness: RoundnessType;
   padding: PaddingType;
   gradient: GradientType;
   dropShadow: DropShadowType;
+  imageType: ImageTypes;
   selectedImage: string | null;
   mainBlockRef: Element | null;
 }

@@ -1,6 +1,12 @@
 import type { IAppStoreData } from "../stores/app";
 import type { IAppStoreRepository } from "./appStoreRepository.interface";
-import type { DropShadowType, GradientType, PaddingType, RoundnessType } from "../models/appStore";
+import type {
+  DropShadowType,
+  GradientType,
+  ImageTypes,
+  PaddingType,
+  RoundnessType
+} from "../models/appStore";
 import { get } from "svelte/store";
 
 export class AppStoreRepository implements IAppStoreRepository {
@@ -8,6 +14,10 @@ export class AppStoreRepository implements IAppStoreRepository {
 
   getImage() {
     return get(this.store).selectedImage;
+  }
+
+  getImageType() {
+    return get(this.store).imageType;
   }
 
   getMainBlockElement() {
@@ -70,6 +80,15 @@ export class AppStoreRepository implements IAppStoreRepository {
     this.store.update((state) => {
       const newState = state;
       newState.selectedImage = image;
+
+      return newState;
+    });
+  }
+
+  updateImageType(imageType: ImageTypes): void {
+    this.store.update((state) => {
+      const newState = state;
+      newState.imageType = imageType;
 
       return newState;
     });

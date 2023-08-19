@@ -29,7 +29,8 @@
   } from "~/constants";
   import { GA, GAActions } from "~/lib/ga";
   import { Toast } from "~/lib/toast";
-  import { camelToPascal, copyBlobToClipBoard, downloadFromBlob } from "~/lib/utils";
+  import { camelToPascal } from "~/lib/utils";
+  import { copyBlobToClipBoard, downloadFromBlob } from "~/lib/core";
   import AnimatedLoading from "~/views/components/basic/AnimatedLoading.svelte";
   import Overlay from "~/views/components/shared/Overlay.svelte";
   import { Button, Card, Stack } from "../../basic";
@@ -182,6 +183,18 @@
       </div>
     </ControlPanelRow>
     <hr class="border-gray-600" />
+    <!-- <ControlPanelRow labelIcon={FileStackIcon} label="Image Type">
+      {#each imageTypes as type}
+        <button
+          class={clsx("text-white", {
+            "border-b border-white": $appStore.imageType === type
+          })}
+          on:click={() => appService?.updateImageType(type)}
+        >
+          {type}
+        </button>
+      {/each}
+    </ControlPanelRow> -->
     <div>
       <p class="text-gray-400 text-sm">
         You can copy or save the image below. The image will be saved with the current settings.

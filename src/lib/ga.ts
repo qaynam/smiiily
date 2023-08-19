@@ -1,4 +1,4 @@
-// import { PUBLIC_GA_TRACKING_ID } from "$env/static/public";
+import { PUBLIC_GA_TRACKING_ID } from "$env/static/public";
 
 declare global {
   interface Window {
@@ -30,14 +30,14 @@ class GA {
       await this.loadTagManager();
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push("js", new Date());
-      window.dataLayer.push("config", process.env.PUBLIC_GA_TRACKING_ID);
+      window.dataLayer.push("config", PUBLIC_GA_TRACKING_ID);
     }
   }
 
   private async loadTagManager() {
     this.loadedResult = await import(
       /* @vite-ignore */
-      `https://www.googletagmanager.com/gtag/js?id=${process.env.PUBLIC_GA_TRACKING_ID}`
+      `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`
     );
   }
 

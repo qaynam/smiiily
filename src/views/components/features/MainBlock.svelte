@@ -10,7 +10,7 @@
   import ImagePicker from "./ImagePicker.svelte";
 
   let appService: AppService | undefined;
-  let ref: HTMLDivElement;
+  const maxImageSize = 1024 * 1024 * 3; // 3MB
 
   const imageSelectedHandler = ({ file }: { file: File }) => {
     appService?.updateSelectedImage(file);
@@ -58,7 +58,7 @@
         alt=""
       />
     {:else}
-      <ImagePicker onImageSelected={imageSelectedHandler} />
+      <ImagePicker onImageSelected={imageSelectedHandler} {maxImageSize} />
     {/if}
   </div>
 </Card>

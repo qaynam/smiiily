@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { GA } from "~/lib/ga";
   import "~/styles/app.css";
   import Stack from "~/views/components/basic/Stack.svelte";
   import PwaInstallPromptSlot from "~/views/components/features/PWAInstallPromptSlot.svelte";
   import ToastSlot from "~/views/components/features/ToastSlot.svelte";
 
   onMount(async () => {
-    const GA = (await import("$lib/ga")).GA;
     await GA.load();
   });
 </script>

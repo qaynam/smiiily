@@ -7,7 +7,7 @@
   import { twMerge } from "tailwind-merge";
   import ArrowBarToDown from "../icons/ArrowBarToDown.svelte";
   import { GA, GAActions } from "~/lib/ga";
-  import { isImageFile } from "~/lib/utils";
+  import { isFileSizeOver, isImageFile } from "~/lib/utils";
   import { Toast } from "~/lib/toast";
 
   let imagePickerRef: HTMLLabelElement;
@@ -15,17 +15,25 @@
   export let onImageSelected: ({ file }: { file: File }) => void | Promise<void> = () => void 0;
   export let style: string = "";
   export let id: string = "";
+  export let maxImageSize = 1024 * 1024 * 3; // 3MB
 
   const changeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
     const currentTarget = e.currentTarget;
     const files = currentTarget?.files;
     if (files && files.length && files[0]) {
-      if (!isImageFile(files[0])) {
+      const file = files[0];
+      if (!isImageFile(file)) {
         Toast.show("Invalid file type", "error");
         return;
       }
+
+      if (isFileSizeOver(file, maxImageSize)) {
+        Toast.show("File size is too large", "error");
+        return;
+      }
+
       onImageSelected({
-        file: files[0]
+        file: file
       });
     }
   };
@@ -49,6 +57,11 @@
 
       if (!isImageFile(file)) {
         Toast.show("Invalid file type", "error");
+        return;
+      }
+
+      if (isFileSizeOver(file, maxImageSize)) {
+        Toast.show("File size is too large", "error");
         return;
       }
 
@@ -84,6 +97,12 @@
         Toast.show("Invalid file type", "error");
         return;
       }
+
+      if (isFileSizeOver(file, maxImageSize)) {
+        Toast.show("File size is too large", "error");
+        return;
+      }
+
       if (file) {
         onImageSelected({
           file
