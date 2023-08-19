@@ -1,21 +1,10 @@
 import type {
   DropShadowType,
+  ImageTypes as ImageTypes,
   GradientType,
   PaddingType,
   RoundnessType
 } from "~/application/models/appStore";
-
-// export const gradients = [
-//   "bg-gradient-to-l from-violet-700 via-indigo-300 to-cyan-400",
-//   "bg-gradient-to-tl from-fuchsia-300 via-blue-300 to-red-400",
-//   "bg-gradient-to-l from-cyan-100 via-purple-300 to-white",
-//   "bg-gradient-to-r from-green-300 to-purple-400",
-//   "bg-gradient-to-r from-indigo-300 to-purple-400",
-//   "bg-gradient-to-t from-cyan-600 via-cyan-400 to-indigo-100",
-//   "bg-gradient-to-r from-rose-100 to-teal-100",
-//   "bg-gradient-to-br from-transparent via-orange-100 to-white",
-//   "bg-gradient-to-r from-gray-700 via-gray-900 to-black"
-// ];
 
 export const gradients: Record<GradientType, string> = {
   "violet-to-cyan-horizontal-gradient":
@@ -57,3 +46,4 @@ export const paddingTypes = Object.keys(paddings) as PaddingType[];
 export const roundnessTypes = Object.keys(roundness) as RoundnessType[];
 export const dropShadowTypes = Object.keys(dropShadows) as DropShadowType[];
 export const gradientTypes = Object.keys(gradients) as GradientType[];
+export const imageTypes: ImageTypes[] = ["image/png", "image/jpeg", "image/gif"];

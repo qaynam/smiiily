@@ -12,7 +12,7 @@ export async function copyBlobToClipBoard(blob: Blob, type: string) {
   ]);
 }
 
-export async function domToBlob(dom: Element) {
+export async function domToBlob(dom: Element, type?: "toPng" | "toJpeg") {
   const scale = 4;
   if (!dom) {
     throw new Error("dom is null");
@@ -21,6 +21,8 @@ export async function domToBlob(dom: Element) {
   if (!dom.clientWidth || !dom.clientHeight) {
     throw new Error("dom.clientWidth or dom.clientHeight is null or 0");
   }
+
+  console.log(await domtoimage.toJpeg(dom));
 
   try {
     const result = await domtoimage.toBlob(dom, {
@@ -55,4 +57,11 @@ export function downloadFromBlob(blob: Blob) {
 
 export function camelToPascal(str: string) {
   return str.replace(/^\w/, (c) => c.toUpperCase());
+}
+
+export function isImageFile(file: File) {
+  const pattern = /^image\/(png|jpeg|jpg|gif|webp)$/;
+  const type = file.type;
+
+  return pattern.test(type);
 }

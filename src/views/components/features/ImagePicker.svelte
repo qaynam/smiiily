@@ -6,6 +6,9 @@
   import { clsx } from "clsx";
   import { twMerge } from "tailwind-merge";
   import ArrowBarToDown from "../icons/ArrowBarToDown.svelte";
+  import { GA, GAActions } from "~/lib/ga";
+  import { isImageFile } from "~/lib/utils";
+  import { Toast } from "~/lib/toast";
 
   let imagePickerRef: HTMLLabelElement;
   let dragOver = false;
@@ -14,14 +17,20 @@
   export let id: string = "";
 
   const changeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (e.target && e.currentTarget.files && e.currentTarget.files.length > 0) {
+    const currentTarget = e.currentTarget;
+    const files = currentTarget?.files;
+    if (files && files.length && files[0]) {
+      if (!isImageFile(files[0])) {
+        Toast.show("Invalid file type", "error");
+        return;
+      }
       onImageSelected({
-        file: e.currentTarget.files[0]
+        file: files[0]
       });
     }
   };
 
-  const paseHandler = (e: ClipboardEvent) => {
+  const pasteHandler = (e: ClipboardEvent) => {
     if (e.target && e.clipboardData) {
       const items = e.clipboardData.items;
       if (items.length === 0) {
@@ -38,9 +47,16 @@
         return;
       }
 
+      if (!isImageFile(file)) {
+        Toast.show("Invalid file type", "error");
+        return;
+      }
+
       onImageSelected({
         file
       });
+
+      GA.sendEvent(GAActions.IMAGE_PASTE, JSON.stringify({ file }));
     }
   };
 
@@ -64,21 +80,26 @@
     dragOver = false;
     if (e.dataTransfer && e.dataTransfer.files) {
       const file = e.dataTransfer.files[0];
+      if (!isImageFile(file)) {
+        Toast.show("Invalid file type", "error");
+        return;
+      }
       if (file) {
         onImageSelected({
           file
         });
       }
+      GA.sendEvent(GAActions.IMAGE_DROP, JSON.stringify({ file }));
     }
   };
 
   onMount(() => {
-    window.addEventListener("paste", paseHandler);
+    window.addEventListener("paste", pasteHandler);
     imagePickerRef.addEventListener("dragover", dragOverHandler, false);
     imagePickerRef.addEventListener("dragleave", dragleaveHandler, false);
     imagePickerRef.addEventListener("drop", dropHandler, false);
     return () => {
-      window.removeEventListener("paste", paseHandler);
+      window.removeEventListener("paste", pasteHandler);
       imagePickerRef.removeEventListener("dragover", dragOverHandler, false);
       imagePickerRef.removeEventListener("dragleave", dragleaveHandler, false);
       imagePickerRef.removeEventListener("drop", dropHandler, false);

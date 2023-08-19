@@ -1,4 +1,4 @@
-import { derived, get, writable, type Writable } from "svelte/store";
+import { derived, writable, type Writable } from "svelte/store";
 import { domToBlob } from "~/lib/utils";
 import type { IAppStore } from "../models/appStore";
 
@@ -7,18 +7,12 @@ const prevStore: IAppStore = {
   roundness: "medium",
   gradient: "cyan-to-indigo-vertical-gradient",
   dropShadow: "medium",
+  imageType: "image/png",
   selectedImage: null,
   mainBlockRef: null
 };
 
-const state = writable<IAppStore>(prevStore);
-
-export const appStore = {
-  ...state,
-  get: (key: keyof IAppStore) => {
-    return get(state)[key];
-  }
-};
+export const appStore = writable<IAppStore>(prevStore);
 
 interface IAppStoreDomImage {
   blob: Blob | null;
@@ -26,7 +20,7 @@ interface IAppStoreDomImage {
 }
 
 export const domImage = derived<Writable<IAppStore>, IAppStoreDomImage>(
-  state,
+  appStore,
   ($appStore, set, update) => {
     let timer: NodeJS.Timeout | null = null;
     const ref = $appStore.mainBlockRef;

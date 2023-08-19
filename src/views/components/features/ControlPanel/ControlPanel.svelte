@@ -23,27 +23,40 @@
     dropShadowTypes,
     gradientTypes,
     gradients,
+    imageTypes,
     paddingTypes,
     roundnessTypes
   } from "~/constants";
-  import { camelToPascal, copyBlobToClipBoard } from "~/lib/utils";
+  import { GA, GAActions } from "~/lib/ga";
   import { Toast } from "~/lib/toast";
-  import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
-  import ControlPanelRow from "./ControlPanelRow.svelte";
+  import { camelToPascal, copyBlobToClipBoard, downloadFromBlob } from "~/lib/utils";
   import AnimatedLoading from "~/views/components/basic/AnimatedLoading.svelte";
   import Overlay from "~/views/components/shared/Overlay.svelte";
-  import { downloadFromBlob } from "~/lib/utils";
   import { Button, Card, Stack } from "../../basic";
+  import FileStackIcon from "../../icons/FileStackIcon.svelte";
+  import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
+  import ControlPanelRow from "./ControlPanelRow.svelte";
 
   let appService: AppService | undefined;
 
   const removeImage = () => {
     appService?.removeImage();
+    GA.sendEvent(GAActions.CLICK, "remove-image");
   };
 
   const saveImage = async () => {
     if (mainBlockDomImage) {
       downloadFromBlob(mainBlockDomImage);
+      GA.sendEvent(
+        GAActions.CLICK,
+        "save-image",
+        JSON.stringify({
+          roundness: currentRoundness,
+          padding: currentPadding,
+          dropShadow: currentDropShadow,
+          gradient: currentGradient
+        })
+      );
     } else {
       Toast.show("No image to save", "error");
     }
@@ -54,8 +67,28 @@
       try {
         await copyBlobToClipBoard(mainBlockDomImage, mainBlockDomImage.type);
         Toast.show("Copied to clipboard", "success");
+        GA.sendEvent(
+          GAActions.CLICK,
+          "copy-image",
+          JSON.stringify({
+            roundness: currentRoundness,
+            padding: currentPadding,
+            dropShadow: currentDropShadow,
+            gradient: currentGradient
+          })
+        );
       } catch (error) {
         Toast.show("Failed to copy", "error");
+        GA.sendEvent(
+          GAActions.CLICK,
+          "copy-image-failed",
+          JSON.stringify({
+            roundness: currentRoundness,
+            padding: currentPadding,
+            dropShadow: currentDropShadow,
+            gradient: currentGradient
+          })
+        );
       }
     } else {
       Toast.show("No image to copy", "error");
@@ -149,6 +182,11 @@
       </div>
     </ControlPanelRow>
     <hr class="border-gray-600" />
+    <div>
+      <p class="text-gray-400 text-sm">
+        You can copy or save the image below. The image will be saved with the current settings.
+      </p>
+    </div>
     <div class="flex flex-col gap-4">
       <Overlay show={loading}>
         <AnimatedLoading />

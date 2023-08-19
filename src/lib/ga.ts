@@ -1,4 +1,4 @@
-import { PUBLIC_GA_TRACKING_ID } from "$env/static/public";
+// import { PUBLIC_GA_TRACKING_ID } from "$env/static/public";
 
 declare global {
   interface Window {
@@ -8,7 +8,10 @@ declare global {
 }
 
 export enum GAActions {
-  CLICK = "_button_click"
+  CLICK = "_button_click",
+  IMAGE_DROP = "_image_drop",
+  IMAGE_PASTE = "_image_paste",
+  IMAGE_SELECTED = "_image_selected"
 }
 
 class GA {
@@ -24,16 +27,17 @@ class GA {
 
   public async load() {
     if (!this.loadedResult) {
+      await this.loadTagManager();
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push("js", new Date());
-      window.dataLayer.push("config", PUBLIC_GA_TRACKING_ID);
-      await this.loadTagManager();
+      window.dataLayer.push("config", process.env.PUBLIC_GA_TRACKING_ID);
     }
   }
 
   private async loadTagManager() {
     this.loadedResult = await import(
-      `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`
+      /* @vite-ignore */
+      `https://www.googletagmanager.com/gtag/js?id=${process.env.PUBLIC_GA_TRACKING_ID}`
     );
   }
 
