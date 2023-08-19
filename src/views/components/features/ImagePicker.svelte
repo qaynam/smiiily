@@ -45,8 +45,17 @@
         return;
       }
 
-      const item = items[0];
-      if (item.kind !== "file") {
+      let item: DataTransferItem | null = null;
+
+      for (const i of items) {
+        if (i.type.startsWith("image")) {
+          item = i;
+          break;
+        }
+      }
+
+      if (!item) {
+        Toast.show("Invalid file type pasted.", "error");
         return;
       }
 
