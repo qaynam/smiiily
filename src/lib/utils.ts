@@ -12,3 +12,11 @@ export function isImageFile(file: File) {
 export function isFileSizeOver(file: File, size: number) {
   return file.size > size;
 }
+
+export function isAppleDevice() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (
+    /iPad|iPhone|iPod|Safari|Apple|safari|apple/.test(window.navigator.userAgent) &&
+    !(window as any).MSStream
+  );
+}

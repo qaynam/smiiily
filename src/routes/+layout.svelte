@@ -1,10 +1,13 @@
 <script lang="ts">
+  import "~/styles/app.css";
   import { onMount } from "svelte";
   import { GA } from "~/lib/ga";
-  import "~/styles/app.css";
   import Stack from "~/views/components/basic/Stack.svelte";
+  import { useClipboardPermission } from "~/views/components/features/ClipboardPermission.svelte";
   import PwaInstallPromptSlot from "~/views/components/features/PWAInstallPromptSlot.svelte";
   import ToastSlot from "~/views/components/features/ToastSlot.svelte";
+
+  useClipboardPermission();
 
   onMount(async () => {
     await GA.load();
