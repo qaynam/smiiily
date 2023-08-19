@@ -8,6 +8,11 @@ const prevStore: IAppStore = {
   gradient: "cyan-to-indigo-vertical-gradient",
   dropShadow: "medium",
   imageType: "image/png",
+  rotate: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
   selectedImage: null,
   mainBlockRef: null
 };

@@ -5,7 +5,8 @@
     DownloadIcon,
     PaletteIcon,
     RadiusTopLeftIcon,
-    ShadowIcon
+    ShadowIcon,
+    ThreeDRotateIcon
   } from "@icons/index";
   import { clsx } from "clsx";
   import { onMount } from "svelte";
@@ -37,6 +38,7 @@
   import FileStackIcon from "../../icons/FileStackIcon.svelte";
   import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
   import ControlPanelRow from "./ControlPanelRow.svelte";
+  import RotateDrawer from "./RotateDrawer.svelte";
 
   let appService: AppService | undefined;
 
@@ -112,6 +114,14 @@
     appService?.updateGradient(gradientType);
   };
 
+  const rotateZHandler = (value: number) => {
+    $appStore.rotate = {
+      x: 0,
+      y: 0,
+      z: value
+    };
+  };
+
   $: currentRoundness = $appStore.roundness;
   $: currentPadding = $appStore.padding;
   $: currentDropShadow = $appStore.dropShadow;
@@ -181,6 +191,9 @@
           />
         {/each}
       </div>
+    </ControlPanelRow>
+    <ControlPanelRow labelIcon={ThreeDRotateIcon} label="Rotate">
+      <RotateDrawer onRotateZChange={rotateZHandler} />
     </ControlPanelRow>
     <hr class="border-gray-600" />
     <!-- <ControlPanelRow labelIcon={FileStackIcon} label="Image Type">

@@ -9,6 +9,7 @@ import PaletteIcon from "./PaletteIcon.svelte";
 import PhotoIcon from "./PhotoIcon.svelte";
 import RadiusTopLeftIcon from "./RadiusTopLeftIcon.svelte";
 import RotateClockWiseIcon from "./RotateClockWiseIcon.svelte";
+import ThreeDRotateIcon from "./ThreeDRotateIcon.svelte";
 
 export {
   ShadowIcon,
@@ -21,5 +22,6 @@ export {
   PaletteIcon,
   PhotoIcon,
   RadiusTopLeftIcon,
-  RotateClockWiseIcon
+  RotateClockWiseIcon,
+  ThreeDRotateIcon
 };

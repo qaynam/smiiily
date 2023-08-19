@@ -19,6 +19,11 @@ export interface IAppStore {
   gradient: GradientType;
   dropShadow: DropShadowType;
   imageType: ImageTypes;
+  rotate: {
+    x: number;
+    y: number;
+    z: number;
+  };
   selectedImage: string | null;
   mainBlockRef: Element | null;
 }

@@ -51,10 +51,11 @@
       <img
         src={selectImageUrl}
         class={twMerge(
-          "mx-auto overflow-hidden object-cover transition-all duration-300",
+          "mx-auto overflow-hidden object-cover transition-all duration-100 ease-in-out",
           currentRoundness,
           currentDropShadow
         )}
+        style={`transform: rotate3d(1,0,0,${$appStore.rotate.z}deg);`}
         alt=""
       />
     {:else}
