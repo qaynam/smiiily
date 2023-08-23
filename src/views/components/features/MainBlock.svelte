@@ -1,6 +1,6 @@
 <script lang="ts">
   import clsx from "clsx";
-  import { afterUpdate, onMount, tick } from "svelte";
+  import { onMount, tick } from "svelte";
   import { twMerge } from "tailwind-merge";
   import { App } from "~/application/main";
   import type { AppService } from "~/application/services/AppService";
@@ -29,6 +29,12 @@
   $: currentRoundness = roundness[$appStore.roundness];
   $: selectImageUrl = $appStore.selectedImage;
   $: currentDropShadow = dropShadows[$appStore.dropShadow];
+  $: imageStyle = `transform: 
+          perspective(1000px) 
+          rotateX(${$appStore.rotate.y}deg) 
+          rotateY(${$appStore.rotate.x}deg) 
+          scale3d(1, 1, 1);
+        `;
 
   onMount(async () => {
     appService = App.getAppService();
@@ -39,7 +45,7 @@
   onMounted={domChangeHandler}
   class={twMerge(
     clsx(
-      "lg:w-9/12 w-full bg-transparent transition-all ease-in-out duration-300 lg:min-h-[800px] min-h-[400px] overflow-hidden flex",
+      "lg:w-9/12 w-full bg-transparent transition-all ease-in-out duration-300 lg:min-h-[800px] min-h-[400px] overflow-hidden flex lg:static sticky top-3 z-10",
       currentGradient,
       currentPadding,
       currentRoundness
@@ -51,11 +57,11 @@
       <img
         src={selectImageUrl}
         class={twMerge(
-          "mx-auto overflow-hidden object-cover transition-all duration-100 ease-in-out",
+          "mx-auto overflow-hidden object-cover transition-all duration-150 ease-linear",
           currentRoundness,
           currentDropShadow
         )}
-        style={`transform: rotate3d(1,0,0,${$appStore.rotate.z}deg);`}
+        style={imageStyle}
         alt=""
       />
     {:else}

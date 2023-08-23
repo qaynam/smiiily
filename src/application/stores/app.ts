@@ -10,8 +10,7 @@ const prevStore: IAppStore = {
   imageType: "image/png",
   rotate: {
     x: 0,
-    y: 0,
-    z: 0
+    y: 0
   },
   selectedImage: null,
   mainBlockRef: null

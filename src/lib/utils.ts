@@ -1,3 +1,5 @@
+import { browser } from "$app/environment";
+
 export function camelToPascal(str: string) {
   return str.replace(/^\w/, (c) => c.toUpperCase());
 }
@@ -19,4 +21,8 @@ export function isAppleDevice() {
     /iPad|iPhone|iPod|Safari|Apple|safari|apple/.test(window.navigator.userAgent) &&
     !(window as any).MSStream
   );
+}
+
+export function isSPView() {
+  return browser && window.innerWidth < 768;
 }

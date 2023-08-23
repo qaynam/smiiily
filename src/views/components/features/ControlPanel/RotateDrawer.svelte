@@ -7,82 +7,73 @@
     x: 0,
     y: 0
   };
-  let mouseMoveOut = false;
-  export let onRotateZChange: (range: number) => void = () => {};
-
-  const mouseMoveHandler = (e: MouseEvent) => {
-    console.log(e.x, e.y);
-  };
-
-  const mouseOutHandler = (e: MouseEvent) => {
-    if (dragging) {
-      mouseMoveOut = true;
-      if (browser) {
-        document.addEventListener("mousemove", mouseMoveHandler);
-      }
+  let circleRef: HTMLDivElement | null = null;
+  export let onRotateZChange: (circlePosition: { x: number; y: number }) => void = () => {};
+  export let defaultPosition: { x: number; y: number } = { x: 0, y: 0 };
+  export const rotateDrawerRef = {
+    force: (position: { x: number; y: number }) => {
+      circlePosition = position;
     }
   };
 
-  const dragHandler = (e: MouseEvent | TouchEvent) => {
+  const dragHandler = (e: PointerEvent) => {
     e.preventDefault();
     if (!dragging) return;
     const currentEl = e.currentTarget as HTMLElement;
     if (!currentEl.parentElement) {
       return;
     }
-    const centerX = currentEl.clientWidth / 2;
-    const centerY = currentEl.clientHeight / 2;
+    const rect = currentEl.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
-    let left = 0;
-    let top = 0;
+    // 子要素の位置を取得
+    const left = e.offsetX;
+    const top = e.offsetY;
 
-    if (e instanceof TouchEvent) {
-      const rect = currentEl.getBoundingClientRect();
-      left = e.targetTouches[0].clientX - rect.left;
-      top = e.targetTouches[0].clientY - rect.top;
-    } else {
-      // 子要素の位置を取得
-      left = e.offsetX;
-      top = e.offsetY;
-    }
+    const x = left < centerX ? -(centerX - left) : left - centerX;
+    const y = top < centerY ? -(centerY - top) : top - centerY;
 
-    // 子要素の幅と高さの半分を取得
-    const x = left <= centerX ? -(centerX - left) : left - centerX;
-    const y = top <= centerY ? -(centerY - top) : top - centerY;
     circlePosition = {
-      x: x >= centerX ? centerX : x <= -centerX ? -centerX : x,
-      y: y >= centerY ? centerY : y <= -centerY ? -centerY : y
+      x: Math.round(x >= centerX ? centerX : x <= -centerX ? -centerX : x),
+      y: Math.round(y >= centerY ? centerY : y <= -centerY ? -centerY : y)
     };
   };
 
-  const mouseDownHandler = (e: MouseEvent | TouchEvent) => {
+  const mouseDownHandler = (e: PointerEvent) => {
     e.preventDefault();
-    console.log("MouseDown");
     dragging = true;
+    if (browser) {
+      circleRef?.setPointerCapture(e.pointerId);
+      circleRef?.addEventListener("pointermove", dragHandler, {
+        passive: false
+      });
+    }
   };
 
-  const mouseUpHandler = (e: MouseEvent | TouchEvent) => {
+  const mouseUpHandler = (e: PointerEvent) => {
     e.preventDefault();
-    console.log("MouseUp");
     dragging = false;
-    if (mouseMoveOut) {
-      mouseMoveOut = false;
-      if (browser) {
-        document.removeEventListener("mousemove", mouseMoveHandler);
-      }
+    if (browser) {
+      circleRef?.releasePointerCapture(e.pointerId);
+      circleRef?.removeEventListener("pointermove", dragHandler);
     }
   };
 
   $: {
-    onRotateZChange(circlePosition.y * 3);
+    onRotateZChange(circlePosition);
+  }
+
+  $: {
+    circlePosition = defaultPosition;
   }
 
   onMount(() => {
-    document.addEventListener("mouseup", mouseUpHandler);
-    document.addEventListener("touchcancel", mouseUpHandler);
+    document.addEventListener("pointerup", mouseUpHandler, {
+      passive: false
+    });
     return () => {
-      document.removeEventListener("mouseup", mouseUpHandler);
-      document.removeEventListener("touchcancel", mouseUpHandler);
+      document.removeEventListener("pointerup", mouseUpHandler);
     };
   });
 </script>
@@ -91,22 +82,15 @@
   class="w-[48px] h-[48px] inline-flex items-center justify-center bg-slate-800 rounded-full border border-slate-700"
 >
   <div
-    on:touchstart|nonpassive|stopPropagation={mouseDownHandler}
-    on:touchend|nonpassive|stopPropagation={mouseUpHandler}
-    on:touchmove|nonpassive|stopPropagation={dragHandler}
-    on:blur={() => {
-      dragging = false;
-    }}
-    on:mousedown={mouseDownHandler}
-    on:mousemove={dragHandler}
-    on:mouseout={mouseOutHandler}
-    on:mouseup={mouseUpHandler}
-    draggable="true"
-    class="cursor-move transition-all duration-100 ease-in-out"
+    on:pointerdown|preventDefault|nonpassive|stopPropagation={mouseDownHandler}
+    on:pointerup|preventDefault|nonpassive|stopPropagation={mouseUpHandler}
+    on:pointercancel|preventDefault|nonpassive|stopPropagation={mouseUpHandler}
+    bind:this={circleRef}
+    class="cursor-move transition-transform duration-75 ease-linear touch-none"
     style={`transform: translate(${circlePosition.x}px,${circlePosition.y}px);`}
   >
     <svg
-      class="w-[24px] h-[24px] rounded-full shadow-xl text-slate-200 block"
+      class="w-[28px] h-[28px] rounded-full shadow-xl text-slate-200 block"
       viewBox="0 0 24 24"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

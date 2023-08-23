@@ -24,23 +24,22 @@
     dropShadowTypes,
     gradientTypes,
     gradients,
-    imageTypes,
     paddingTypes,
     roundnessTypes
   } from "~/constants";
+  import { copyBlobToClipBoard, downloadFromBlob } from "~/lib/core";
   import { GA, GAActions } from "~/lib/ga";
   import { Toast } from "~/lib/toast";
-  import { camelToPascal } from "~/lib/utils";
-  import { copyBlobToClipBoard, downloadFromBlob } from "~/lib/core";
+  import { camelToPascal, isSPView } from "~/lib/utils";
   import AnimatedLoading from "~/views/components/basic/AnimatedLoading.svelte";
   import Overlay from "~/views/components/shared/Overlay.svelte";
   import { Button, Card, Stack } from "../../basic";
-  import FileStackIcon from "../../icons/FileStackIcon.svelte";
   import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
   import ControlPanelRow from "./ControlPanelRow.svelte";
   import RotateDrawer from "./RotateDrawer.svelte";
 
   let appService: AppService | undefined;
+  let rotateDrawerRef: { force: (position: { x: number; y: number }) => void };
 
   const removeImage = () => {
     appService?.removeImage();
@@ -114,13 +113,25 @@
     appService?.updateGradient(gradientType);
   };
 
-  const rotateZHandler = (value: number) => {
+  const rotateZHandler = (value: { x: number; y: number }) => {
+    const img = $appStore.mainBlockRef?.querySelector("img");
+    if (!img) {
+      return;
+    }
+    const { width, height } = img?.getBoundingClientRect();
+    const ratio = Math.floor(Math.sqrt(width ** 2 + height ** 2) / Math.sqrt(24 ** 2 + 24 ** 2));
+    const realValue = {
+      x: value.x * ratio,
+      y: value.y * ratio
+    };
+    const shrinkRatio = isSPView() ? 25 : 100;
     $appStore.rotate = {
-      x: 0,
-      y: 0,
-      z: value
+      x: realValue.x / shrinkRatio,
+      y: realValue.y / shrinkRatio
     };
   };
+
+  const resetPosition = () => {};
 
   $: currentRoundness = $appStore.roundness;
   $: currentPadding = $appStore.padding;
@@ -128,9 +139,11 @@
   $: currentGradient = $appStore.gradient;
   $: mainBlockDomImage = $domImage.blob;
   $: loading = $domImage.processing;
+  $: rotateChanged = $appStore.rotate.x !== 0 || $appStore.rotate.y !== 0;
 
   onMount(() => {
     appService = App.getAppService();
+    console.log(rotateDrawerRef);
   });
 </script>
 
@@ -193,7 +206,22 @@
       </div>
     </ControlPanelRow>
     <ControlPanelRow labelIcon={ThreeDRotateIcon} label="Rotate">
-      <RotateDrawer onRotateZChange={rotateZHandler} />
+      <div class="flex gap-4 items-center">
+        <RotateDrawer onRotateZChange={rotateZHandler} bind:rotateDrawerRef />
+        <div>
+          {#if rotateChanged}
+            <button
+              class="px-4 py-2 text-xs bg-zinc-800 hover:bg-zinc-700 hover:border-zinc-600 rounded-lg border border-zinc-700 flex"
+              on:click={() => {
+                $appStore.rotate = { x: 0, y: 0 };
+                rotateDrawerRef.force({ x: 0, y: 0 });
+              }}
+            >
+              <span> Reset </span>
+            </button>
+          {/if}
+        </div>
+      </div>
     </ControlPanelRow>
     <hr class="border-gray-600" />
     <!-- <ControlPanelRow labelIcon={FileStackIcon} label="Image Type">

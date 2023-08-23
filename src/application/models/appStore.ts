@@ -22,7 +22,6 @@ export interface IAppStore {
   rotate: {
     x: number;
     y: number;
-    z: number;
   };
   selectedImage: string | null;
   mainBlockRef: Element | null;
