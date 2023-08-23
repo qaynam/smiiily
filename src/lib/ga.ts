@@ -16,7 +16,7 @@ export enum GAActions {
 
 class GA {
   private static instance: GA;
-  private loadedResult: unknown;
+  private scriptAppended: unknown;
 
   public static getInstance(): GA {
     if (!GA.instance) {
@@ -26,7 +26,7 @@ class GA {
   }
 
   public async load() {
-    if (!this.loadedResult) {
+    if (!this.scriptAppended) {
       await this.loadTagManager();
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push("js", new Date());
@@ -35,10 +35,11 @@ class GA {
   }
 
   private async loadTagManager() {
-    this.loadedResult = await import(
-      /* @vite-ignore */
-      `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`
-    );
+    const script = document.createElement("script");
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`;
+    script.async = true;
+    document.body.appendChild(script);
+    this.scriptAppended = true;
   }
 
   public sendEvent(action: GAActions, ...args: string[]) {
