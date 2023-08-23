@@ -20,7 +20,7 @@
     <Stack class="gap-2">
       <span class="text-white">
         <a class="underline" target="_blank" href="https://www.buymeacoffee.com/qaynam">
-          Buy Me a Coffee
+          If You Like This App, Buy Me A Coffee
           <img src="/coffee-twemoji.png" class="h-4 w-4 inline-block ml-2" alt="" />
         </a>
       </span>
