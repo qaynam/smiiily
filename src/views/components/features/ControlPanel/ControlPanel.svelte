@@ -143,7 +143,6 @@
 
   onMount(() => {
     appService = App.getAppService();
-    console.log(rotateDrawerRef);
   });
 </script>
 
