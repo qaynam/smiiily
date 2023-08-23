@@ -11,7 +11,8 @@ export enum GAActions {
   CLICK = "_button_click",
   IMAGE_DROP = "_image_drop",
   IMAGE_PASTE = "_image_paste",
-  IMAGE_SELECTED = "_image_selected"
+  IMAGE_SELECTED = "_image_selected",
+  IMAGE_ROTATE = "_image_rotate"
 }
 
 class GA {

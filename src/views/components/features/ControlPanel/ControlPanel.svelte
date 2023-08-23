@@ -37,6 +37,7 @@
   import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
   import ControlPanelRow from "./ControlPanelRow.svelte";
   import RotateDrawer from "./RotateDrawer.svelte";
+  import BuyMeACoffeeBlock from "../BuyMeACoffeeBlock.svelte";
 
   let appService: AppService | undefined;
   let rotateDrawerRef: { force: (position: { x: number; y: number }) => void };
@@ -146,122 +147,125 @@
   });
 </script>
 
-<Card class="border border-gray-600 lg:w-3/12 w-full self-start">
-  <Stack class="gap-10">
-    <ControlPanelRow labelIcon={RadiusTopLeftIcon} label="Roundness">
-      {#each roundnessTypes as roundnessType}
-        <button
-          class={twMerge(
-            clsx("text-white", {
-              "border-b border-white": currentRoundness === roundnessType
-            })
-          )}
-          on:click={() => onRoundnessChange(roundnessType)}
-        >
-          {camelToPascal(roundnessType)}
-        </button>
-      {/each}
-    </ControlPanelRow>
-    <ControlPanelRow labelIcon={BoxPaddingIcon} label="Padding">
-      {#each paddingTypes as paddingType}
-        <button
-          class={clsx("text-white", {
-            "border-b border-white": currentPadding === paddingType
-          })}
-          on:click={() => onPaddingChange(paddingType)}
-        >
-          {camelToPascal(paddingType)}
-        </button>
-      {/each}
-    </ControlPanelRow>
-    <ControlPanelRow labelIcon={ShadowIcon} label="Drop Shadow">
-      <div class="gap-3 flex flex-wrap">
-        {#each dropShadowTypes as dropShadowType}
-          <button
-            class={clsx("text-white", {
-              "border-b border-white": currentDropShadow === dropShadowType
-            })}
-            on:click={() => onDropShadowChange(dropShadowType)}
-          >
-            {camelToPascal(dropShadowType)}
-          </button>
-        {/each}
-      </div>
-    </ControlPanelRow>
-    <ControlPanelRow labelIcon={PaletteIcon} label="Gradients">
-      <div class="flex flex-wrap gap-3">
-        {#each gradientTypes as gradientType}
+<div class="lg:w-3/12 w-full self-start space-y-6">
+  <Card class="border border-zinc-700 bg-zinc-950 rounded-xl">
+    <Stack class="gap-10">
+      <ControlPanelRow labelIcon={RadiusTopLeftIcon} label="Roundness">
+        {#each roundnessTypes as roundnessType}
           <button
             class={twMerge(
-              gradients[gradientType],
-              "w-10 h-10 rounded-lg",
-              clsx({
-                "ring-2 ring-white": currentGradient === gradientType
+              clsx("text-white", {
+                "border-b border-white": currentRoundness === roundnessType
               })
             )}
-            on:click={() => onGradientChange(gradientType)}
-          />
+            on:click={() => onRoundnessChange(roundnessType)}
+          >
+            {camelToPascal(roundnessType)}
+          </button>
         {/each}
-      </div>
-    </ControlPanelRow>
-    <ControlPanelRow labelIcon={ThreeDRotateIcon} label="Rotate">
-      <div class="flex gap-4 items-center">
-        <RotateDrawer onRotateZChange={rotateZHandler} bind:rotateDrawerRef />
-        <div>
-          {#if rotateChanged}
+      </ControlPanelRow>
+      <ControlPanelRow labelIcon={BoxPaddingIcon} label="Padding">
+        {#each paddingTypes as paddingType}
+          <button
+            class={clsx("text-white", {
+              "border-b border-white": currentPadding === paddingType
+            })}
+            on:click={() => onPaddingChange(paddingType)}
+          >
+            {camelToPascal(paddingType)}
+          </button>
+        {/each}
+      </ControlPanelRow>
+      <ControlPanelRow labelIcon={ShadowIcon} label="Drop Shadow">
+        <div class="gap-3 flex flex-wrap">
+          {#each dropShadowTypes as dropShadowType}
             <button
-              class="px-4 py-2 text-xs bg-zinc-800 hover:bg-zinc-700 hover:border-zinc-600 rounded-lg border border-zinc-700 flex"
-              on:click={() => {
-                $appStore.rotate = { x: 0, y: 0 };
-                rotateDrawerRef.force({ x: 0, y: 0 });
-              }}
+              class={clsx("text-white", {
+                "border-b border-white": currentDropShadow === dropShadowType
+              })}
+              on:click={() => onDropShadowChange(dropShadowType)}
             >
-              <span> Reset </span>
+              {camelToPascal(dropShadowType)}
             </button>
-          {/if}
+          {/each}
         </div>
+      </ControlPanelRow>
+      <ControlPanelRow labelIcon={PaletteIcon} label="Gradients">
+        <div class="flex flex-wrap gap-3">
+          {#each gradientTypes as gradientType}
+            <button
+              class={twMerge(
+                gradients[gradientType],
+                "w-10 h-10 rounded-lg",
+                clsx({
+                  "ring-2 ring-white": currentGradient === gradientType
+                })
+              )}
+              on:click={() => onGradientChange(gradientType)}
+            />
+          {/each}
+        </div>
+      </ControlPanelRow>
+      <ControlPanelRow labelIcon={ThreeDRotateIcon} label="Rotate">
+        <div class="flex gap-4 items-center">
+          <RotateDrawer onRotateZChange={rotateZHandler} bind:rotateDrawerRef />
+          <div>
+            {#if rotateChanged}
+              <button
+                class="px-4 py-2 text-xs bg-zinc-800 hover:bg-zinc-700 hover:border-zinc-600 rounded-lg border border-zinc-700 flex"
+                on:click={() => {
+                  $appStore.rotate = { x: 0, y: 0 };
+                  rotateDrawerRef.force({ x: 0, y: 0 });
+                }}
+              >
+                <span> Reset </span>
+              </button>
+            {/if}
+          </div>
+        </div>
+      </ControlPanelRow>
+      <hr class="border-gray-600" />
+      <!-- <ControlPanelRow labelIcon={FileStackIcon} label="Image Type">
+        {#each imageTypes as type}
+          <button
+            class={clsx("text-white", {
+              "border-b border-white": $appStore.imageType === type
+            })}
+            on:click={() => appService?.updateImageType(type)}
+          >
+            {type}
+          </button>
+        {/each}
+      </ControlPanelRow> -->
+      <div>
+        <p class="text-gray-400 text-sm">
+          You can copy or save the image below. The image will be saved with the current settings.
+        </p>
       </div>
-    </ControlPanelRow>
-    <hr class="border-gray-600" />
-    <!-- <ControlPanelRow labelIcon={FileStackIcon} label="Image Type">
-      {#each imageTypes as type}
-        <button
-          class={clsx("text-white", {
-            "border-b border-white": $appStore.imageType === type
-          })}
-          on:click={() => appService?.updateImageType(type)}
-        >
-          {type}
-        </button>
-      {/each}
-    </ControlPanelRow> -->
-    <div>
-      <p class="text-gray-400 text-sm">
-        You can copy or save the image below. The image will be saved with the current settings.
-      </p>
-    </div>
-    <div class="flex flex-col gap-4">
-      <Overlay show={loading}>
-        <AnimatedLoading />
-      </Overlay>
-      <div class="flex justify-between gap-4">
-        <Button leftIcon={CopyIcon} {loading} class={"w-full"} outline on:click={copyImage}>
-          <span> Copy </span>
-        </Button>
-        <Button
-          {loading}
-          leftIcon={DownloadIcon}
-          class="bg-blue-600 hover:bg-blue-500 text-white w-full"
-          on:click={saveImage}
-        >
-          <span> Save </span>
-        </Button>
+      <div class="flex flex-col gap-4">
+        <Overlay show={loading}>
+          <AnimatedLoading />
+        </Overlay>
+        <div class="flex justify-between gap-4">
+          <Button leftIcon={CopyIcon} {loading} class={"w-full"} outline on:click={copyImage}>
+            <span> Copy </span>
+          </Button>
+          <Button
+            {loading}
+            leftIcon={DownloadIcon}
+            class="bg-blue-600 hover:bg-blue-500 text-white w-full"
+            on:click={saveImage}
+          >
+            <span> Save </span>
+          </Button>
+        </div>
+        {#if mainBlockDomImage}
+          <Button {loading} leftIcon={RotateClockWiseIcon} outline on:click={removeImage}>
+            <span> Remove Image </span>
+          </Button>
+        {/if}
       </div>
-      {#if mainBlockDomImage}
-        <Button {loading} leftIcon={RotateClockWiseIcon} outline on:click={removeImage}>
-          <span> Remove Image </span>
-        </Button>
-      {/if}
-    </div>
-  </Stack>
-</Card>
+    </Stack>
+  </Card>
+  <BuyMeACoffeeBlock />
+</div>

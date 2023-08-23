@@ -1,6 +1,7 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { onMount } from "svelte";
+  import { GA, GAActions } from "~/lib/ga";
 
   let dragging = false;
   let circlePosition = {
@@ -8,6 +9,7 @@
     y: 0
   };
   let circleRef: HTMLDivElement | null = null;
+  let eventSent = false;
   export let onRotateZChange: (circlePosition: { x: number; y: number }) => void = () => {};
   export let defaultPosition: { x: number; y: number } = { x: 0, y: 0 };
   export const rotateDrawerRef = {
@@ -19,6 +21,12 @@
   const dragHandler = (e: PointerEvent) => {
     e.preventDefault();
     if (!dragging) return;
+
+    if (!eventSent) {
+      GA.sendEvent(GAActions.IMAGE_ROTATE, "drag");
+      eventSent = true;
+    }
+
     const currentEl = e.currentTarget as HTMLElement;
     if (!currentEl.parentElement) {
       return;
