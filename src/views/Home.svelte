@@ -11,7 +11,9 @@
 <div class="sm:container lg:min-w-[1300px] mx-auto md:px-0 px-6">
   <Stack>
     <Header />
-    <div class="min-w-5xl flex lg:flex-row flex-col lg:space-x-10 space-x-0 space-y-6 lg:space-y-0">
+    <div
+      class="min-w-5xl flex lg:flex-row flex-col justify-center lg:space-x-10 space-x-0 space-y-6 lg:space-y-0"
+    >
       <MainBlock />
       <ControlPanel />
     </div>

@@ -41,31 +41,42 @@
   });
 </script>
 
-<Card
-  onMounted={domChangeHandler}
-  class={twMerge(
-    clsx(
-      "lg:w-9/12 w-full bg-transparent transition-all ease-in-out duration-300 lg:min-h-[800px] min-h-[400px] overflow-hidden flex lg:static sticky top-3 z-10",
-      currentGradient,
-      currentPadding,
-      currentRoundness
-    )
-  )}
->
-  <div class="flex items-center justify-center m-auto min-h-full w-full h-full">
-    {#if selectImageUrl}
-      <img
-        src={selectImageUrl}
-        class={twMerge(
-          "mx-auto overflow-hidden object-cover transition-all duration-150 ease-linear",
+<div class="w-full lg:w-9/12 flex lg:static sticky top-3 z-10">
+  <div
+    class={clsx("flex items-center justify-center mx-auto", {
+      "w-full h-full": !selectImageUrl
+    })}
+  >
+    <Card
+      onMounted={domChangeHandler}
+      class={twMerge(
+        clsx(
+          "bg-transparent transition-all ease-in-out duration-300 overflow-hidden flex",
+          currentGradient,
+          currentPadding,
           currentRoundness,
-          currentDropShadow
-        )}
-        style={imageStyle}
-        alt=""
-      />
-    {:else}
-      <ImagePicker onImageSelected={imageSelectedHandler} {maxImageSize} />
-    {/if}
+          {
+            "lg:min-h-[800px] min-h-[400px] w-full h-full": !selectImageUrl
+          }
+        )
+      )}
+    >
+      <div class="flex items-center justify-center m-auto">
+        {#if selectImageUrl}
+          <img
+            src={selectImageUrl}
+            class={twMerge(
+              "mx-auto overflow-hidden object-cover transition-all duration-150 ease-linear",
+              currentRoundness,
+              currentDropShadow
+            )}
+            style={imageStyle}
+            alt=""
+          />
+        {:else}
+          <ImagePicker onImageSelected={imageSelectedHandler} {maxImageSize} />
+        {/if}
+      </div>
+    </Card>
   </div>
-</Card>
+</div>
