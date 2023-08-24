@@ -100,18 +100,58 @@
 
   const onRoundnessChange = (roundnessKey: RoundnessType) => {
     appService?.updateRoundness(roundnessKey);
+    GA.sendEvent(
+      GAActions.CLICK,
+      "roundness-change",
+      JSON.stringify({
+        roundness: currentRoundness,
+        padding: currentPadding,
+        dropShadow: currentDropShadow,
+        gradient: currentGradient
+      })
+    );
   };
 
   const onPaddingChange = (paddingType: PaddingType) => {
     appService?.updatePadding(paddingType);
+    GA.sendEvent(
+      GAActions.CLICK,
+      "padding-change",
+      JSON.stringify({
+        roundness: currentRoundness,
+        padding: currentPadding,
+        dropShadow: currentDropShadow,
+        gradient: currentGradient
+      })
+    );
   };
 
   const onDropShadowChange = (dropShadowType: DropShadowType) => {
     appService?.updateDropShadow(dropShadowType);
+    GA.sendEvent(
+      GAActions.CLICK,
+      "drop-shadow-change",
+      JSON.stringify({
+        roundness: currentRoundness,
+        padding: currentPadding,
+        dropShadow: currentDropShadow,
+        gradient: currentGradient
+      })
+    );
   };
 
   const onGradientChange = (gradientType: GradientType) => {
     appService?.updateGradient(gradientType);
+    GA.sendEvent(
+      GAActions.CLICK,
+      "gradient-change",
+      JSON.stringify({
+        roundness: currentRoundness,
+        padding: currentPadding,
+        dropShadow: currentDropShadow,
+        gradient: currentGradient
+      })
+    );
   };
 
   const rotateChangeHandler = (value: { x: number; y: number }) => {

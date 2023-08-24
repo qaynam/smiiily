@@ -1,10 +1,24 @@
+<script>
+  import { GA, GAActions } from "~/lib/ga";
+</script>
+
 <div
   id="bmac"
   class="border border-white bg-zinc-900 hover:bg-zinc-800/70 rounded-xl mx-auto lg:w-auto w-full items-center justify-center"
 >
   <div class="flex flex-col p-4 rounded-xl space-y-6 bg-transparent backdrop-blur-xl">
     <span class="block font-semibold text-center"> If You Like This App, Buy Me A Coffee 😋 </span>
-    <a target="_blank" href="https://www.buymeacoffee.com/qaynam">
+    <a
+      target="_blank"
+      on:click={() => {
+        GA.sendEvent(
+          GAActions.LINK_CLICK,
+          "Buy Me A Coffee",
+          "https://www.buymeacoffee.com/qaynam"
+        );
+      }}
+      href="https://www.buymeacoffee.com/qaynam"
+    >
       <img
         src="/buy-me-a-coffee.png"
         alt="buy me a coffee"
