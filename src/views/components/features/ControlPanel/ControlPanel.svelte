@@ -256,7 +256,7 @@
             class="bg-blue-600 hover:bg-blue-500 text-white w-full"
             on:click={saveImage}
           >
-            <span> Save </span>
+            <span> Download </span>
           </Button>
         </div>
         {#if mainBlockDomImage}
