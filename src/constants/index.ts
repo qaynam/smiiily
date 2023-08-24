@@ -18,7 +18,11 @@ export const gradients: Record<GradientType, string> = {
   "rose-to-teal-horizontal-gradient": "bg-gradient-to-r from-rose-100 to-teal-100",
   "transparent-to-white-diagonal-gradient-bottom-right-with-orange-hint":
     "bg-gradient-to-br from-transparent via-orange-100 to-white",
-  "dark-gray-to-black-horizontal-gradient": "bg-gradient-to-r from-gray-700 via-gray-900 to-black"
+  "dark-gray-to-black-horizontal-gradient": "bg-gradient-to-r from-gray-700 via-gray-900 to-black",
+  "mesh-gradient-1": "mesh-gradient-1",
+  "mesh-gradient-2": "mesh-gradient-2",
+  "mesh-gradient-3": "mesh-gradient-3",
+  "mesh-gradient-4": "mesh-gradient-4"
 };
 
 export const paddings = {

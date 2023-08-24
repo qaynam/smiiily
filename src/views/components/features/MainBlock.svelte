@@ -1,6 +1,6 @@
 <script lang="ts">
   import clsx from "clsx";
-  import { onMount, tick } from "svelte";
+  import { afterUpdate, onMount, tick } from "svelte";
   import { twMerge } from "tailwind-merge";
   import { App } from "~/application/main";
   import type { AppService } from "~/application/services/AppService";
@@ -11,17 +11,10 @@
 
   let appService: AppService | undefined;
   const maxImageSize = 1024 * 1024 * 3; // 3MB
+  let blockRef: HTMLDivElement;
 
   const imageSelectedHandler = ({ file }: { file: File }) => {
     appService?.updateSelectedImage(file);
-  };
-
-  const domChangeHandler = async (el: HTMLDivElement | null) => {
-    if (!el) {
-      return;
-    }
-    await tick();
-    appService?.updateMainBlockElement(el);
   };
 
   $: currentGradient = gradients[$appStore.gradient];
@@ -39,6 +32,10 @@
   onMount(async () => {
     appService = App.getAppService();
   });
+
+  afterUpdate(() => {
+    appService?.updateMainBlockElement(blockRef);
+  });
 </script>
 
 <div class="w-full lg:w-9/12 flex lg:static sticky top-3 z-20">
@@ -47,36 +44,42 @@
       "w-full h-full": !selectImageUrl
     })}
   >
-    <Card
-      onMounted={domChangeHandler}
-      class={twMerge(
-        clsx(
-          "bg-transparent transition-all ease-in-out duration-300 overflow-hidden flex",
-          currentGradient,
-          currentPadding,
-          currentRoundness,
-          {
-            "lg:min-h-[800px] min-h-[400px] w-full h-full": !selectImageUrl
-          }
-        )
-      )}
+    <div
+      class={clsx("bg-white  transition-all ease-in-out duration-300", currentRoundness, {
+        "w-full h-full": !selectImageUrl
+      })}
+      bind:this={blockRef}
     >
-      <div class="flex items-center justify-center m-auto">
-        {#if selectImageUrl}
-          <img
-            src={selectImageUrl}
-            class={twMerge(
-              "mx-auto overflow-hidden object-cover transition-all duration-150 ease-linear",
-              currentRoundness,
-              currentDropShadow
-            )}
-            style={imageStyle}
-            alt=""
-          />
-        {:else}
-          <ImagePicker onImageSelected={imageSelectedHandler} {maxImageSize} />
-        {/if}
-      </div>
-    </Card>
+      <Card
+        class={twMerge(
+          clsx(
+            "bg-transparent transition-all ease-in-out duration-300 overflow-hidden flex",
+            currentGradient,
+            currentPadding,
+            currentRoundness,
+            {
+              "lg:min-h-[800px] min-h-[400px] w-full h-full": !selectImageUrl
+            }
+          )
+        )}
+      >
+        <div class="flex items-center justify-center m-auto">
+          {#if selectImageUrl}
+            <img
+              src={selectImageUrl}
+              class={twMerge(
+                "mx-auto overflow-hidden object-cover transition-all duration-150 ease-linear",
+                currentRoundness,
+                currentDropShadow
+              )}
+              style={imageStyle}
+              alt=""
+            />
+          {:else}
+            <ImagePicker onImageSelected={imageSelectedHandler} {maxImageSize} />
+          {/if}
+        </div>
+      </Card>
+    </div>
   </div>
 </div>

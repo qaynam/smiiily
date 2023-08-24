@@ -10,7 +10,8 @@ export type GradientType =
   | "cyan-to-indigo-vertical-gradient"
   | "rose-to-teal-horizontal-gradient"
   | "transparent-to-white-diagonal-gradient-bottom-right-with-orange-hint"
-  | "dark-gray-to-black-horizontal-gradient";
+  | "dark-gray-to-black-horizontal-gradient"
+  | `mesh-gradient-${number}`;
 export type ImageTypes = "image/png" | "image/jpeg" | "image/gif";
 
 export interface IAppStore {
