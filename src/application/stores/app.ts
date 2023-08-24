@@ -5,7 +5,7 @@ import type { IAppStore } from "../models/appStore";
 const prevStore: IAppStore = {
   padding: "medium",
   roundness: "medium",
-  gradient: "cyan-to-indigo-vertical-gradient",
+  gradient: "cyan-to-white-horizontal-gradient",
   dropShadow: "medium",
   imageType: "image/png",
   rotate: {
