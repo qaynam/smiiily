@@ -48,7 +48,7 @@ class GA {
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
     
-      gtag('config', '<G-XXXXXX>');
+      gtag('config', '${PUBLIC_GA_TRACKING_ID}');
     `;
     document.body.appendChild(script);
   }
