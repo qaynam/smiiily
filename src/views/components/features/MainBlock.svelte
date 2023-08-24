@@ -41,7 +41,7 @@
   });
 </script>
 
-<div class="w-full lg:w-9/12 flex lg:static sticky top-3 z-10">
+<div class="w-full lg:w-9/12 flex lg:static sticky top-3 z-20">
   <div
     class={clsx("flex items-center justify-center mx-auto", {
       "w-full h-full": !selectImageUrl
