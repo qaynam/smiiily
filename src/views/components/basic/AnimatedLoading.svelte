@@ -1,64 +1,85 @@
-<script lang="ts">
-  import { onMount } from "svelte";
-
-  const gradientColors = [
-    "#0033cc",
-    "#0040ff",
-    "#3366ff",
-    "#4d88ff",
-    "#4d88ff",
-    "#4d88ff",
-    "#3366ff",
-    "#0040ff",
-    "#0033cc"
-  ];
-  onMount(() => {
-    const squares = document.querySelectorAll<HTMLElement>(".square");
-
-    squares.forEach((square, index) => {
-      square.style.backgroundColor = gradientColors[index];
-      square.style.animationDelay = `${index * 0.125}s`;
-    });
-  });
-</script>
-
-<div class="spinner">
-  <div class="square" id="s1" />
-  <div class="square" id="s2" />
-  <div class="square" id="s3" />
-  <div class="square" id="s4" />
-  <div class="square" id="s5" />
-  <div class="square" id="s6" />
-  <div class="square" id="s7" />
-  <div class="square" id="s8" />
-  <div class="square" id="s9" />
+<div class="snippet" data-title="dot-falling">
+  <div class="stage">
+    <div class="dot-falling" />
+  </div>
 </div>
 
-<style scoped>
-  .spinner {
-    display: grid;
-    grid-template-columns: repeat(3, 12px);
-    grid-template-rows: repeat(3, 12px);
-    grid-gap: 5px;
-    justify-items: center;
-    align-items: center;
+<style>
+  .dot-falling {
+    position: relative;
+    left: -9999px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #3b83f6;
+    color: #3b83f6;
+    box-shadow: 9999px 0 0 0 #3b83f6;
+    animation: dot-falling 1s infinite linear;
+    animation-delay: 0.1s;
+  }
+  .dot-falling::before,
+  .dot-falling::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+  }
+  .dot-falling::before {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #3b83f6;
+    color: #3b83f6;
+    animation: dot-falling-before 1s infinite linear;
+    animation-delay: 0s;
+  }
+  .dot-falling::after {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #3b83f6;
+    color: #3b83f6;
+    animation: dot-falling-after 1s infinite linear;
+    animation-delay: 0.2s;
   }
 
-  .square {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-    box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
-    animation: scaleInOut 1s infinite;
-  }
-
-  @keyframes scaleInOut {
-    0%,
-    100% {
-      transform: scale(1);
+  @keyframes dot-falling {
+    0% {
+      box-shadow: 9999px -15px 0 0 rgba(152, 128, 255, 0);
     }
-    50% {
-      transform: scale(0.7);
+    25%,
+    50%,
+    75% {
+      box-shadow: 9999px 0 0 0 #3b83f6;
+    }
+    100% {
+      box-shadow: 9999px 15px 0 0 rgba(152, 128, 255, 0);
+    }
+  }
+  @keyframes dot-falling-before {
+    0% {
+      box-shadow: 9984px -15px 0 0 rgba(152, 128, 255, 0);
+    }
+    25%,
+    50%,
+    75% {
+      box-shadow: 9984px 0 0 0 #3b83f6;
+    }
+    100% {
+      box-shadow: 9984px 15px 0 0 rgba(152, 128, 255, 0);
+    }
+  }
+  @keyframes dot-falling-after {
+    0% {
+      box-shadow: 10014px -15px 0 0 rgba(152, 128, 255, 0);
+    }
+    25%,
+    50%,
+    75% {
+      box-shadow: 10014px 0 0 0 #3b83f6;
+    }
+    100% {
+      box-shadow: 10014px 15px 0 0 rgba(152, 128, 255, 0);
     }
   }
 </style>
