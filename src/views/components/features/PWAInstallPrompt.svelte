@@ -11,7 +11,7 @@
       <div class="flex gap-2">
         <button class="text-xl inline-block p-2" on:click={onClose}>&times;</button>
         <div class="flex items-center gap-2">
-          <img src="/favicon.png" class="h-10 w-10" alt="" />
+          <img src="/logo.png" class="h-10 w-10" alt="" />
           <span class="font-semibold">
             Install PWA and use the app without opening your browser! !
           </span>
