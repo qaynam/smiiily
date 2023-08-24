@@ -3,7 +3,7 @@
   import { requestClipboardPermission } from "~/lib/permissions";
   import { Toast } from "~/lib/toast";
 
-  export function useClipboardPermission() {
+  export function initClipboardPermission() {
     const documentFocusHandler = async () => {
       try {
         if (!(await requestClipboardPermission("read"))) {

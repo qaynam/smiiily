@@ -1,17 +1,13 @@
 <script lang="ts">
   import "~/styles/app.css";
-  import { onMount } from "svelte";
-  import { GA } from "~/lib/ga";
   import Stack from "~/views/components/basic/Stack.svelte";
-  import { useClipboardPermission } from "~/views/components/features/ClipboardPermission.svelte";
   import PwaInstallPromptSlot from "~/views/components/features/PWAInstallPromptSlot.svelte";
   import ToastSlot from "~/views/components/features/ToastSlot.svelte";
+  import { initClipboardPermission } from "~/views/components/features/modules/ClipboardPermission.svelte";
+  import { initGA } from "~/views/components/features/modules/Ga.svelte";
 
-  useClipboardPermission();
-
-  onMount(async () => {
-    await GA.load();
-  });
+  initClipboardPermission();
+  initGA();
 </script>
 
 <main class="flex-grow bg-slate-950 relative md:pt-10 pt-6 flex flex-col gap-8 min-w-[375px]">
