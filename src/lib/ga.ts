@@ -36,11 +36,15 @@ class GA {
   }
 
   private async loadTagManager() {
-    const script = document.createElement("script");
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`;
-    script.async = true;
-    document.body.appendChild(script);
-    this.scriptAppended = true;
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.onload = resolve;
+      script.onerror = reject;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`;
+      script.async = true;
+      document.body.appendChild(script);
+      this.scriptAppended = true;
+    });
   }
 
   public sendEvent(action: GAActions, ...args: string[]) {
