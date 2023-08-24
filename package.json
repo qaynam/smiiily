@@ -38,6 +38,7 @@
 	"type": "module",
 	"dependencies": {
 		"@neodrag/svelte": "^2.0.3",
+		"@vercel/analytics": "^1.0.2",
 		"clsx": "^2.0.0",
 		"concat-stream": "^2.0.0",
 		"dom-to-image": "^2.6.0",

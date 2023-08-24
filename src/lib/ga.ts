@@ -28,23 +28,29 @@ class GA {
 
   public async load() {
     if (!this.scriptAppended) {
-      await this.loadTagManager();
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push("js", new Date());
-      window.dataLayer.push("config", PUBLIC_GA_TRACKING_ID);
+      this.loadTagManager();
+      this.initFn();
     }
   }
 
-  private async loadTagManager() {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.onload = resolve;
-      script.onerror = reject;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`;
-      script.async = true;
-      document.body.appendChild(script);
-      this.scriptAppended = true;
-    });
+  private loadTagManager() {
+    const script = document.createElement("script");
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`;
+    script.async = true;
+    document.body.appendChild(script);
+    this.scriptAppended = true;
+  }
+
+  private initFn() {
+    const script = document.createElement("script");
+    script.innerHTML = `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', '<G-XXXXXX>');
+    `;
+    document.body.appendChild(script);
   }
 
   public sendEvent(action: GAActions, ...args: string[]) {

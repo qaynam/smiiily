@@ -1,3 +1,10 @@
+<script>
+  import { dev } from "$app/environment";
+  const analyticsSource = dev
+    ? "https://cdn.vercel-insights.com/v1/script.debug.js"
+    : "/_vercel/insights/script.js";
+</script>
+
 <svelte:head>
   <title>Smiiily - Gradient Background Image Generator for Social Media</title>
   <meta
@@ -35,4 +42,6 @@
   <meta property="og:image" content="https://smiiily.app/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+
+  <script defer src={analyticsSource}></script>
 </svelte:head>
