@@ -10,7 +10,7 @@
   };
   let circleRef: HTMLDivElement | null = null;
   let eventSent = false;
-  export let onRotateZChange: (circlePosition: { x: number; y: number }) => void = () => {};
+  export let onRotateChange: (circlePosition: { x: number; y: number }) => void = () => {};
   export let defaultPosition: { x: number; y: number } = { x: 0, y: 0 };
   export const rotateDrawerRef = {
     force: (position: { x: number; y: number }) => {
@@ -69,7 +69,7 @@
   };
 
   $: {
-    onRotateZChange(circlePosition);
+    onRotateChange(circlePosition);
   }
 
   $: {

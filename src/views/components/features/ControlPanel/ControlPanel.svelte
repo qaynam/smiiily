@@ -114,25 +114,24 @@
     appService?.updateGradient(gradientType);
   };
 
-  const rotateZHandler = (value: { x: number; y: number }) => {
+  const rotateChangeHandler = (value: { x: number; y: number }) => {
     const img = $appStore.mainBlockRef?.querySelector("img");
     if (!img) {
       return;
     }
-    const { width, height } = img?.getBoundingClientRect();
-    const ratio = Math.floor(Math.sqrt(width ** 2 + height ** 2) / Math.sqrt(24 ** 2 + 24 ** 2));
-    const realValue = {
-      x: value.x * ratio,
-      y: value.y * ratio
+
+    // rotate controller max moving distance is 14px
+    // so we need to add 11px to the value because we want to rotate the image max -+25deg
+    // and we also need to keep minus axis value
+    const absValue = {
+      x: Math.abs(value.x) + 11,
+      y: Math.abs(value.y) + 11
     };
-    const shrinkRatio = isSPView() ? 25 : 100;
     $appStore.rotate = {
-      x: realValue.x / shrinkRatio,
-      y: realValue.y / shrinkRatio
+      x: value.x === 0 ? 0 : absValue.x * (value.x > 0 ? 1 : -1),
+      y: value.y === 0 ? 0 : absValue.y * (value.y > 0 ? 1 : -1)
     };
   };
-
-  const resetPosition = () => {};
 
   $: currentRoundness = $appStore.roundness;
   $: currentPadding = $appStore.padding;
@@ -208,7 +207,7 @@
       </ControlPanelRow>
       <ControlPanelRow labelIcon={ThreeDRotateIcon} label="Rotate">
         <div class="flex gap-4 items-center">
-          <RotateDrawer onRotateZChange={rotateZHandler} bind:rotateDrawerRef />
+          <RotateDrawer onRotateChange={rotateChangeHandler} bind:rotateDrawerRef />
           <div>
             {#if rotateChanged}
               <button
