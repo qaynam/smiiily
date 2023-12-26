@@ -1,6 +1,7 @@
 import Card from "./Card.svelte";
 import Button from "./Button.svelte";
-import Stack from "./Stack.svelte";
+import HStack from "./HStack.svelte";
+import VStack from "./VStack.svelte";
 import AnimatedLoading from "./AnimatedLoading.svelte";
 
-export { Card, Button, Stack, AnimatedLoading };
+export { Card, Button, HStack, VStack, AnimatedLoading };
