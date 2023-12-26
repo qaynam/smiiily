@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import "~/styles/app.css";
   import { HStack } from "~/views/components/basic";
   import PwaInstallPromptSlot from "~/views/components/features/PWAInstallPromptSlot.svelte";
@@ -8,17 +9,27 @@
 
   initClipboardPermission();
   initGA();
+
+  let showFooter = false;
+
+  onMount(() => {
+    if (!location.pathname.startsWith("/v2")) {
+      showFooter = true;
+    }
+  });
 </script>
 
-<main class="flex-grow bg-slate-950 relative md:pt-10 pt-6 flex flex-col gap-8 min-w-[375px]">
+<main class="flex-grow bg-slate-950 relative flex flex-col min-w-[375px]">
   <slot />
-  <footer class="mt-auto mb-6 text-center">
-    <HStack class="gap-6 lg:px-0 px-6">
-      <span class="text-gray-500">
-        &copy; 2023 <a class="underline" href="/">Smiiily</a>
-      </span>
-    </HStack>
-  </footer>
+  {#if showFooter}
+    <footer class="mt-auto mb-6 text-center">
+      <HStack class="gap-6 lg:px-0 px-6">
+        <span class="text-gray-500">
+          &copy; 2023 <a class="underline" href="/">Smiiily</a>
+        </span>
+      </HStack>
+    </footer>
+  {/if}
 </main>
 <ToastSlot />
 <PwaInstallPromptSlot />
