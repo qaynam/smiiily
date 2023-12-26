@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
-  import type { ChangeEventHandler } from "svelte/elements";
-  import Stack from "../basic/Stack.svelte";
-  import PhotoIcon from "../icons/PhotoIcon.svelte";
   import { clsx } from "clsx";
+  import { onMount } from "svelte";
+  import { HStack } from "~/views/components/basic";
+
+  import type { ChangeEventHandler } from "svelte/elements";
   import { twMerge } from "tailwind-merge";
-  import ArrowBarToDown from "../icons/ArrowBarToDown.svelte";
   import { GA, GAActions } from "~/lib/ga";
-  import { isFileSizeOver, isImageFile } from "~/lib/utils";
   import { Toast } from "~/lib/toast";
+  import { isFileSizeOver, isImageFile } from "~/lib/utils";
+  import ArrowBarToDown from "../icons/ArrowBarToDown.svelte";
+  import PhotoIcon from "../icons/PhotoIcon.svelte";
 
   let imagePickerRef: HTMLLabelElement;
   let dragOver = false;
@@ -149,7 +150,7 @@
     )
   )}
 >
-  <Stack class="text-center font-normal pointer-events-none">
+  <HStack class="text-center font-normal pointer-events-none">
     <div class="text-center">
       {#if dragOver}
         <ArrowBarToDown class="w-20 h-20 mx-auto text-gray-600" />
@@ -172,7 +173,7 @@
         <span> drop image </span>
       {/if}
     </div>
-  </Stack>
+  </HStack>
 </label>
 <input
   type="file"

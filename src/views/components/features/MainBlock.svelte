@@ -44,13 +44,13 @@
   })}
 >
   <div
-    class={clsx("flex items-center justify-center mx-auto", {
-      "w-full h-full": !selectImageUrl
+    class={clsx("mx-auto", {
+      "w-full": !selectImageUrl
     })}
   >
     <div
       class={clsx("bg-white  transition-all ease-in-out duration-300", currentRoundness, {
-        "w-full h-full": !selectImageUrl
+        "w-full": !selectImageUrl
       })}
       bind:this={blockRef}
     >

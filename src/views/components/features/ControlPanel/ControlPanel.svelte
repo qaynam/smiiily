@@ -30,14 +30,14 @@
   import { copyBlobToClipBoard, downloadFromBlob } from "~/lib/core";
   import { GA, GAActions } from "~/lib/ga";
   import { Toast } from "~/lib/toast";
-  import { camelToPascal, isSPView } from "~/lib/utils";
+  import { camelToPascal } from "~/lib/utils";
   import AnimatedLoading from "~/views/components/basic/AnimatedLoading.svelte";
   import Overlay from "~/views/components/shared/Overlay.svelte";
-  import { Button, Card, Stack } from "../../basic";
+  import { Button, Card, HStack, VStack } from "../../basic";
   import RotateClockWiseIcon from "../../icons/RotateClockWiseIcon.svelte";
+  import BuyMeACoffeeBlock from "../BuyMeACoffeeBlock.svelte";
   import ControlPanelRow from "./ControlPanelRow.svelte";
   import RotateDrawer from "./RotateDrawer.svelte";
-  import BuyMeACoffeeBlock from "../BuyMeACoffeeBlock.svelte";
 
   let appService: AppService | undefined;
   let rotateDrawerRef: { force: (position: { x: number; y: number }) => void };
@@ -188,7 +188,17 @@
 
 <div class="lg:w-3/12 w-full self-start space-y-6">
   <Card class="border border-zinc-700 bg-zinc-950 rounded-xl">
-    <Stack class="gap-10">
+    <HStack class="gap-10">
+      <ControlPanelRow label="Generate Type">
+        <VStack>
+          <Button>
+            <span>Image</span>
+          </Button>
+          <Button>
+            <span>Code</span>
+          </Button>
+        </VStack>
+      </ControlPanelRow>
       <ControlPanelRow labelIcon={RadiusTopLeftIcon} label="Roundness">
         {#each roundnessTypes as roundnessType}
           <button
@@ -304,7 +314,7 @@
           </Button>
         {/if}
       </div>
-    </Stack>
+    </HStack>
   </Card>
   <BuyMeACoffeeBlock />
 </div>
