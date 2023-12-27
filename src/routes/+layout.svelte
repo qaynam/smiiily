@@ -19,9 +19,9 @@
   });
 </script>
 
-<main class="flex-grow bg-slate-950 relative flex flex-col min-w-[375px]">
-  <slot />
-  {#if showFooter}
+{#if showFooter}
+  <main class="flex-grow bg-slate-950 relative flex flex-col min-w-[375px]">
+    <slot />
     <footer class="mt-auto mb-6 text-center">
       <HStack class="gap-6 lg:px-0 px-6">
         <span class="text-gray-500">
@@ -29,7 +29,9 @@
         </span>
       </HStack>
     </footer>
-  {/if}
-</main>
+  </main>
+{:else}
+  <slot />
+{/if}
 <ToastSlot />
 <PwaInstallPromptSlot />
