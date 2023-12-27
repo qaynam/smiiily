@@ -7,7 +7,6 @@
   const CONTROL_PANEL_MAX_WIDTH = 450;
   const CONTROL_PANEL_MIN_WIDTH = 300;
 
-  let controlPanel: undefined | HTMLDivElement;
   let isDragging: boolean = false;
   let controlPanelWidth: number =
     CONTROL_PANEL_MIN_WIDTH + (CONTROL_PANEL_MAX_WIDTH - CONTROL_PANEL_MIN_WIDTH) / 2; // middle of range value
@@ -66,9 +65,8 @@
 </script>
 
 <div
-  class="bg-zinc-900 p-4 relative"
+  class="bg-zinc-900 p-4 relative h-screen overflow-y-auto"
   style:max-width={`${controlPanelWidth}px`}
-  bind:this={controlPanel}
 >
   <div
     class="absolute left-0 top-0 bottom-0 w-1 bg-zinc-700 opacity-0 hover:opacity-100 cursor-col-resize"
@@ -76,12 +74,7 @@
     on:pointerdown|preventDefault|nonpassive|stopPropagation={handleControlBarPointerdown}
     on:pointerup|preventDefault|nonpassive|stopPropagation={handleControlBarPointerUp}
     on:pointercancel|preventDefault|nonpassive|stopPropagation={handleControlBarPointerCancel}
-    on:mouseup={() => {
-      console.log("mouse up");
-    }}
     draggable
   />
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum minima ducimus laudantium tempora, rem
-  cum numquam quaerat ratione culpa consequuntur. Amet hic possimus perferendis? Recusandae fugit eaque
-  facilis aut beatae?
+  <slot />
 </div>

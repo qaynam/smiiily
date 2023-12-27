@@ -1,6 +1,6 @@
 <script lang="ts">
   import clsx from "clsx";
-  import { afterUpdate, onMount, tick } from "svelte";
+  import { SvelteComponent, afterUpdate, onMount, tick } from "svelte";
   import { twMerge } from "tailwind-merge";
   import { App } from "~/application/main";
   import type { AppService } from "~/application/services/AppService";
@@ -9,9 +9,11 @@
   import ImagePicker from "../ImagePicker.svelte";
   import Card from "../../basic/Card.svelte";
 
-  let appService: AppService | undefined;
   const maxImageSize = 1024 * 1024 * 3; // 3MB
+  let appService: AppService | undefined;
   let blockRef: HTMLDivElement;
+  let imageRef: HTMLImageElement;
+  let frameAspectRatio = "aspect-[4/3]";
 
   const imageSelectedHandler = ({ file }: { file: File }) => {
     appService?.updateSelectedImage(file);
@@ -28,6 +30,25 @@
           rotateY(${$appStore.rotate.x}deg) 
           scale3d(1, 1, 1);
         `;
+  $: {
+    (async () => {
+      await tick();
+      if (selectImageUrl) {
+        const gcd = (a: number, b: number): number => {
+          return b == 0 ? a : gcd(b, a % b);
+        };
+
+        const w = imageRef.naturalWidth;
+        const h = imageRef.naturalHeight;
+        const r = gcd(w, h);
+        console.log(imageRef.offsetWidth);
+        console.log(`aspect-[${w / r}/${h / r}]`);
+        frameAspectRatio = `aspect-[${w / r}/${h / r}]`;
+      } else {
+        frameAspectRatio = "aspect-[4/3]";
+      }
+    })();
+  }
 
   onMount(async () => {
     appService = App.getAppService();
@@ -39,51 +60,47 @@
 </script>
 
 <div
-  class={clsx("w-full lg:w-9/12 flex lg:static mx-auto", {
-    "sticky top-3 z-20": !!selectImageUrl
-  })}
+  class={clsx(
+    "bg-transparent flex transition-all ease-in-out duration-300 h-full p-10",
+    currentRoundness
+  )}
 >
-  <div
-    class={clsx("mx-auto", {
-      "w-full": !selectImageUrl
-    })}
+  <Card
+    onMounted={(el) => {
+      el != null && (blockRef = el);
+    }}
+    class={twMerge(
+      clsx(
+        "bg-transparent transition-all ease-in-out duration-300 overflow-hidden flex h-[70%] m-auto relative",
+        currentGradient,
+        currentPadding,
+        currentRoundness,
+        frameAspectRatio
+      )
+    )}
   >
-    <div
-      class={clsx("bg-white  transition-all ease-in-out duration-300", currentRoundness, {
-        "w-full": !selectImageUrl
-      })}
-      bind:this={blockRef}
-    >
-      <Card
+    <div class="flex items-center justify-center m-auto">
+      <img
+        bind:this={imageRef}
         class={twMerge(
           clsx(
-            "bg-transparent transition-all ease-in-out duration-300 overflow-hidden flex",
-            currentGradient,
-            currentPadding,
+            "mx-auto overflow-hidden object-cover transition-all w-full h-full duration-150 ease-linear",
             currentRoundness,
-            {
-              "lg:min-h-[800px] min-h-[400px] w-full h-full": !selectImageUrl
-            }
+            currentDropShadow,
+            frameAspectRatio
           )
         )}
-      >
-        <div class="flex items-center justify-center m-auto">
-          {#if selectImageUrl}
-            <img
-              src={selectImageUrl}
-              class={twMerge(
-                "mx-auto overflow-hidden object-cover transition-all duration-150 ease-linear",
-                currentRoundness,
-                currentDropShadow
-              )}
-              style={imageStyle}
-              alt=""
-            />
-          {:else}
-            <ImagePicker onImageSelected={imageSelectedHandler} {maxImageSize} />
-          {/if}
-        </div>
-      </Card>
+        src={selectImageUrl}
+        on:load={(e) => {
+          e.currentTarget.classList.remove("hidden");
+          console.log(e.currentTarget.clientWidth);
+        }}
+        style={imageStyle}
+        alt=""
+      />
+      {#if !selectImageUrl}
+        <ImagePicker onImageSelected={imageSelectedHandler} {maxImageSize} />
+      {/if}
     </div>
-  </div>
+  </Card>
 </div>
